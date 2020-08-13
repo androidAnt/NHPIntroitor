@@ -1,0 +1,252 @@
+.personCenterMain{padding: 40px 0 60px; overflow: hidden;}
+.subMenu{width:209px; height: auto; float: left; border: 1px solid #d5d5d5; padding: 30px 0 30px 60px;}
+.subMenu h3{margin: 0 0 20px 0; font-size: 16px; color: #333; font-weight: bold;}
+.subMenu a{display: block; font-size: 14px; color: #333; margin-bottom:16px;}
+.subMenu a.curNav{font-weight: bold; color: #da251d;}
+.subMenu li{float: left; cursor: pointer; position: relative;}
+.subMenu div{float: left; width:100%; margin-top: 16px; margin-left: 14px;}
+.subMenu li i{width:8px; height: 5px; background: url("../images/downArrow.png") no-repeat right center; display: inline-block; position: absolute; top:7px; right:-15px;}
+.subMenu li i.on
+{
+    transform:rotate(-180deg);
+    -ms-transform:rotate(-180deg); 	/* IE 9 */
+    -moz-transform:rotate(-180deg); 	/* Firefox */
+    -webkit-transform:rotate(-180deg); /* Safari 鍜�Chrome */
+    -o-transform:rotate(-180deg);
+}
+/* 鎴戠殑鍔ㄥ緱鍒�*/
+.subRight{width:958px; float: right;}
+.personCenterTop{width:958px; height: 142px; border: 1px solid #d5d5d5;}
+.headPortrait{display: inline-block; float: left; width:90px;height: 90px; border-radius: 50%; margin: 25px 30px 0 30px;}
+.headPortrait img{width:100%; height: 100%; float: left; border-radius: 50%;}
+.userNameMsg{margin-top: 40px; width:316px;}
+.userNameMsg p{color: #000; font-size: 14px;}
+.levelShow{float: left; margin-top: 10px;}
+.levelShow i{width:18px; height: 18px; display: inline-block; float: left; background: url("../images/starIco.png") no-repeat; margin:2px 6px 0 0;}
+.levelShow .levelIco{background: none;}
+.levelShow .levelIco img,.levelShow span img{float: left;}
+.levelShow span{width:50px; height: 22px; display: inline-block; float: left;}
+.levelShow .levels{width: auto;height: 22px;margin-right: 2px;}
+.myMsgTop{width:161px; height: 50px; border-left:1px solid #ddd; float: left; margin-top: 44px; text-align: center; display: inline-block;}
+.myMsgTop p{font-size: 12px; color: #888; margin-bottom: 5px;}
+.myMsgTop i{font-style: normal; color: #555; font-size: 28px;}
+.subRTit{margin:25px 0 22px 0; border-bottom: 1px solid #d5d5d5; padding-bottom: 5px; font-size: 16px; color: #333;}
+.subRTit span{font-size: 12px; margin: 5px 0 0 15px;}
+.subRTit a{color: #333; font-size: 14px;}
+.marginRNo{margin-right: 0 !important;}
+.subRCon{width:100%; float: left;}
+.collectList{width:224px; float: left; margin: 0 20px 20px 0;}
+.collectList img{width:224px; height: 168px; float: left;}
+.collectList p{text-align: center; font-size: 14px; margin: 10px 0 5px 0; width:100%; float: left; white-space: nowrap; text-overflow:ellipsis; overflow: hidden;}
+.collectList .goodsPrice{font-size: 18px; color: #da251d; width:100%; float: left;}
+.collectList .goodsPrice i{font-size: 14px; color: #999; text-decoration: line-through; font-style: normal; margin-left: 20px;}
+.collectShopList{width:224px; height: 162px; position: relative; float: left; border: 1px solid #dedede; overflow: hidden; margin: 0 20px 20px 0;}
+.collectShopList p{width:224px; height: 32px; background: #da251d; text-align: center; line-height: 32px; color: #fff; position: absolute; left: 0px; bottom:0px; margin-bottom: 0; font-size: 16px;}
+/* 鍟嗗鍏ラ┗璁よ瘉 */
+.rightBorder{border: 1px solid #d5d5d5;}
+.subRTitle{width:100%; border-bottom: 1px solid #d5d5d5; height: 56px; font-size: 16px; color: #333; line-height: 56px; padding: 0 20px;}
+.approveCon{height: 500px;}
+.approveCon .approveMain{width:460px; height: 1px; margin: 160px auto 0 auto; position: relative; border-bottom: 1px dashed #d5d5d5;}
+.approveMain div{width:60px; height: auto; position: absolute; top:-18px;}
+.approveMain div i{width:36px; height: 36px; border-radius: 50%; background: #fff; display:block; margin: 0 auto; border: 1px solid #ddd;}
+.approveMain div i.on{background: #da251d url("../images/okIco.png") no-repeat; background-size: contain; border: 1px solid #da251d;}
+.approveMain div i.wrong{background: #da251d url("../images/wrongIco.png") no-repeat; background-size: contain; border: 1px solid #da251d;}
+.approveMain div p{font-size: 12px; color: #333; text-align: center; margin-top: 5px; width:100%; float: left;}
+.approveLeft{left:-18px;}
+.approveMiddle{left:48%;}
+.approveRight{left:98%;}
+.approveTip{width:100%; float: left; text-align: center; padding-top: 100px; font-size: 14px; font-weight: bold; color: #333; position: relative;}
+.approveTip i.okIco{width:20px; height: 20px; background: url("../images/tipsOkIco.png") no-repeat; display: inline-block; position: absolute; left:482px; top:100px;}
+.approveTip span{color: #da251d; margin-left:36px; line-height: 24px;}
+/* p21-1缂栬緫涓汉淇℃伅 */
+.sexChose{float: left; position: relative; margin-right:20px;}
+.sexChose >input[type='radio']{padding: 0; margin: 0; height:13px; width:13px; float: left; position: absolute; left: 0; opacity: 0;}
+.sexChose > label{float:left; line-height:13px; height:13px; padding-left:20px; font-weight: normal; margin-bottom: 0;}
+.sexChose > input + label{background:url("../images/checkIco.png") no-repeat; color: #666;}
+.sexChose > input[type="radio"]:checked + label{background:url("../images/checkedIco.png") no-repeat;}
+.editMsgTable{width:100%; margin:150px 0; font-size: 14px; color: #333;}
+.editMsgTable td{padding:9px 5px;}
+.editMsgTable .tdAttr{text-align: right; width:40%;}
+.laydate-icon {background: url("../images/calIco.png") no-repeat 212px 10px !important; border: 1px solid #d5d5d5 !important;}
+.file, .file_box{display: block; height:60px; width:60px; float:left;}
+.file{cursor: pointer; opacity: 0; float: left;}
+.file_box{background:url("../images/uploadImg.png") no-repeat center top; cursor: pointer; height:60px; position: relative;}
+.uploadTips{color: #bcbcbc; font-size: 12px; line-height: 20px; margin: 12px 0 0 12px; float: left;}
+.button{display: block; text-align: center; background: #da251d; color: #fff;}
+.saveMsg,.feedbackMain a,.submitEvaluate{margin-top: 25px; width:170px; height: 44px; line-height: 44px; background: #da251d; color: #fff; font-size: 16px; font-weight: bold;}
+
+/* p29瀹夊叏涓績 */
+.safeMain{width:326px; margin: 0 auto; padding: 60px 0; overflow: hidden;}
+.safeMain li{width:100%; float: left; margin-bottom: 20px; font-size: 14px;}
+.safeMain li input{width:100%; height: 38px; border: 1px solid #d5d5d5; padding: 0 10px; font-size: 14px; float: left;}
+.safeTitle{margin-bottom: 10px !important;}
+.safeTitle span{font-weight: bold; color: #333;}
+.safeTitle i{font-size: 12px; color: #999; font-style: normal; float: right;}
+.submitBtn{width:326px; height: 38px; margin: 20px 0 40px 0; line-height: 38px;}
+.xLine{width:100%; height: 1px; background: #d5d5d5; float: left;}
+.gainCode{width:124px; height: 38px; float: right; display: block; background: #f3f3f3; border: 1px solid #d5d5d5; text-align: center;line-height: 38px; color: #666;}
+/* p31鎰忚鍙嶉 */
+.feedbackMain{width:694px; margin: 80px auto;}
+.feedbackMain textarea{width: 100%; height: 228px; resize: none; border: 1px solid #d5d5d5; padding: 5px;}
+.feedbackMain a{margin: 40px 0 150px 0;}
+/*  p30甯姪涓績 */
+.agreementMain{width:100%; padding: 30px 30px 80px; line-height: 26px; float: left;}
+.pageBread{float: right; width:958px; background: none; margin-bottom:5px; padding: 0 0 5px 0;}
+.breadcrumb > li + li::before {
+    color: #333;
+    content: " > ";
+    padding: 0 5px;
+}
+.breadcrumb > .active {
+    color: #333;
+}
+/* p34浼氬憳绛夌骇 */
+.yourLevel{width:100%; padding: 30px; border-bottom: 1px solid #d5d5d5; float: left;}
+.yourLevel span{margin:3px 6px 0 0;}
+.yourLevel .levelShow{margin-top: 0;}
+.levelIntro{width:100%; float: left; padding: 12px 30px; color: #333; font-weight: bold; border-bottom: 1px solid #d5d5d5;}
+/* p34-鎴戠殑娑堟伅 */
+.msgList{width:100%; margin-bottom: 20px; font-size: 12px; table-layout:fixed;}
+.msgList td a{color: #333;}
+.msgList th{border-bottom: 1px solid #d5d5d5; height:33px; font-weight: normal; color: #999; position: relative; padding-left: 30px;}
+.msgList td{border-bottom: 1px dashed #d5d5d5; height: 62px; position: relative; padding-left: 30px;}
+.msgChose{float: left; position: relative;}
+.msgChose >input[type='checkbox']{padding: 0; margin: 0; height:13px; width:13px; float: left; position: absolute; left: 0; opacity: 0;}
+.msgChose > label{float:left; line-height:13px; height:13px; width:13px; font-weight: normal; margin-bottom: 0;}
+.msgChose > input + label{background:url("../images/checkIco.png") no-repeat; color: #666;}
+.msgChose > input[type="checkbox"]:checked + label{background:url("../images/checkedIco.png") no-repeat;}
+.checkBtn{width:64px; height: 24px; border: 1px solid #d5d5d5; text-align: center; line-height: 24px; display: inline-block;}
+.oprRow{font-size: 12px; margin: 25px 0 0 8px; float: left; width:100%;}
+.oprRow select{height: 24px; border: 1px solid #d5d5d5; width:94px; float: left; margin-right: 8px;}
+.pageMargin{margin: 95px 0 80px 0;}
+.msgTitle{width:332px; overflow: hidden; text-overflow:ellipsis; white-space: nowrap;}
+/*  p34-1娑堟伅璇︽儏 */
+.subMsgDetails{width:100%; float: left; padding:10px 30px 30px;}
+.subMsgDetails h3{font-size: 14px; font-weight:bold; color: #333;}
+.subMsgDetails p{line-height: 26px;}
+.returnBtn{height: 44px; line-height: 44px; width:108px; margin: 30px 0 12px 0;}
+/* p33浼樻儬鍒�*/
+.discountMain{width:100%; float: left; padding:75px 30px 130px;}
+.discountList{width:388px; height:145px; border: 1px solid #da251d; float: left; margin: 0 0 30px 40px;}
+.discountTit{width:100%; height: 38px; background: #da251d; padding: 0 12px; font-weight: bold; line-height: 38px; color: #fff;}
+.discountCon{padding: 23px; color: #333;}
+.discountCon p{margin:3px 0 17px 0;}
+/* p26鎴戠殑鍔ㄨ兘閲�*/
+.ruleLink{background: url("../images/quesIco.png") no-repeat left center; float: right; font-size: 12px; padding-left:16px; color: #333;}
+.detailList{font-size: 14px; font-weight: bold; padding:15px 20px 10px; margin: 0; color: #333;}
+.paddingLeft th,.paddingLeft td{padding-left: 20px;}
+/* p25鍦板潃绠＄悊 */
+.addAddressBtn{padding: 40px 44px 210px 16px;}
+.addAddressBtn a{width:130px; height: 44px; display: block; line-height: 44px;}
+.addAddressBtn .pull-left{border: 1px solid #d5d5d5; text-align: center; font-size: 16px;}
+.addAddressBtn .pull-right{font-size: 14px; font-weight: bold;}
+/* p25-1鏂板鏀惰揣鍦板潃 */
+.select_m{width:102px; height:38px; color: #aaa; padding:0px 4px; float:left; line-height:38px; background:url(../images/selectIco.png) no-repeat right top; cursor:pointer; border: 1px solid #d5d5d5; margin-right: 10px;}
+.select_options{position:absolute; z-index:999; top:0px; left:0px; width:102px; border:1px solid #d5d5d5; padding:5px 0; background:#FFF; color: #aaa; border-top:0px; display:none; overflow-y:auto;}
+.select_options ul{margin-bottom: 0;}
+.select_options li{height:36px; line-height:36px; text-indent:8px; overflow:hidden; cursor:pointer;}
+.select_options li:hover{background:#da251d; color:#fff;}
+.tdAttr i{font-style: normal; color: #da251d; display: inline-block; margin-right: 5px;}
+.addressInputLength{width:325px; height: 38px; border: 1px solid #d5d5d5; float: left; padding: 0 4px;}
+.shortInput{width:145px !important;}
+.addressTable .tdAttr{width:36% !important;}
+/* p23鎴戠殑鏀惰棌 */
+.collectCon .nav-tabs{border: none;}
+.collectCon .nav-tabs li{margin:24px 22px 0 22px;}
+.collectCon .nav-tabs > li a{padding:0 2px 5px; border: none; border-bottom:2px solid #fff;}
+.collectCon .nav-tabs > li.active > a,.collectCon .nav-tabs > li.active > a:focus, .collectCon .nav-tabs > li.active > a:hover{border:none; border-bottom:2px solid #da251d; color: #da251d;}
+.collectCon .nav-tabs > li a:hover{background: none; border: none; border-bottom:2px solid #fff;}
+.collectCon .tab-content{padding-top: 20px;}
+.goodsMsgTd img{float: left;}
+.goodsMsgTd p{float: left; margin:10px 0 0 20px; line-height: 24px; width:220px; font-size: 12px;}
+.collectTable th{padding:0 16px;}
+.returnList th{padding:0 20px;}
+.collectTable td{padding:18px 16px;}
+.returnList td{padding:18px 20px;}
+.allCollect{width:auto !important; padding-left: 20px; margin-left:16px;}
+.collectListPage{margin:40px 0 70px 0;}
+.collectTable .shopIntro{line-height: 26px;}
+.collectTable .toShop{background: #DA251D; border: 1px solid #DA251D; margin-bottom:8px; color: #fff;}
+.returnTop{width:100%; padding: 20px 20px 50px;}
+.returnList{margin-bottom:210px;}
+.returnGoodsName p{width:auto !important;}
+/* p24-4-1鐢宠鍞悗 */
+.subRTitle .checkBtn{font-size: 12px; margin-top:16px;}
+.afterSale{margin: 50px auto;}
+.returnTd{line-height: 38px; vertical-align: top;}
+.returnInput{width:128px; height: 38px; border: 1px solid #d5d5d5; padding: 0 4px; margin-right: 5px;}
+.tdValue p.help-block{margin-bottom: 0; color: #bcbcbc;}
+.returnReason{width:418px; height: 114px; resize: none; border: 1px solid #d5d5d5; padding: 4px;}
+.afterSale .tdAttr{width:35%;}
+.orderMsg{float: left; margin-bottom:15px;}
+.btnRed{background: #DA251D; border: 1px solid #DA251D; color: #fff !important;}
+.btnMargin{margin-bottom: 8px;}
+.Red{color: #DA251D;}
+.orderFoot{width:958px;}
+.orderFootTitle{font-size: 16px; margin-bottom: 20px;}
+.noOrder{padding: 105px 0; text-align: center;}
+.noOrder span{display: block; margin-bottom: 30px;}
+.noOrder a{color: #da251d; text-decoration: underline;}
+.orderSearch{margin-top:18px !important;}
+.orderSearch input{float: left; width:204px; height: 30px; padding: 0 4px;}
+.orderSearch span{display: block; float: left; width:48px; height: 30px; line-height: 30px; margin-left: 8px; cursor: pointer;}
+/* p24-2 璁㈠崟璇︽儏 */
+.orderDetailsTit{float: left; font-size: 16px; background: none; margin-bottom: 0; padding: 0;}
+.orderTraceTit{height: 40px; line-height: 40px; font-weight: bold; padding: 0 15px; border: 1px solid #d5d5d5; margin-top: 15px; width:100%; float: left;}
+.orderTraceCon,.basicMsgCon,.goodsMsgCon{position: relative; border: 1px solid #d5d5d5; float: left; width:100%; height: 160px; border-top:none;}
+.orderTraceCon .orderTraceMain{width:930px; height: 1px; margin:48px 0 0 80px; position: relative; border-bottom: 1px dashed #d5d5d5;}
+.orderBar{width:1200px; position: absolute; top: -20px; left: -100px;}
+.orderTraceCon .orderTraceMain td{position: relative; vertical-align: top;}
+.orderTraceCon .orderTraceMain td div{width:140px; margin:0 auto; text-align: center;}
+.orderTraceMain td div span{font-size: 12px; color: #999;}
+.orderTraceMain td div i{width:36px; height: 36px; border-radius: 50%; background: #fff; display:block; margin: 0 auto; border: 1px solid #ddd;}
+.orderTraceMain td div i.on{background: #da251d url("../images/okIco.png") no-repeat; background-size: contain; border: 1px solid #da251d;}
+.orderTraceMain td div i.wrong{background: #da251d url("../images/wrongIco.png") no-repeat; background-size: contain; border: 1px solid #da251d;}
+.orderTraceMain td div p{font-size: 12px; color: #333; text-align: center; margin:10px 0 5px 0; width:100%; float: left;}
+.btnTd{vertical-align: middle !important;}
+.orderTrace{margin-bottom: 25px; overflow: hidden;}
+.logisticsMain{border: 1px solid #d5d5d5; padding: 20px 60px;}
+.logisticsCon{width:100%; line-height: 24px;}
+.logisticsCon li{margin-bottom: 5px;}
+.logisticsTit td{padding-bottom: 30px;}
+.basicMsgCon{padding:0 60px; height: auto !important;}
+.basicMsgCon .basicMsgLeft{margin: 25px 0 50px 0;}
+.basicMsgLeft .payStyle{margin-top: 20px;}
+.basicMsgRight{float: right; height: 100%; border-left:1px solid #d5d5d5; padding-left: 60px;}
+.basicMsgRight h3{font-size: 14px; color: #333; margin-bottom:15px;}
+.basicMsgRight table td{padding: 5px 3px;}
+.basicMsgRight table td span{font-weight: bold; color: #da251d;}
+.countTd{padding: 15px 0 20px 0 !important;}
+.goodsMsgCon{height: auto !important;}
+.goodsTable{border: 1px solid #d5d5d5; border-top: none;}
+/* p24-3鍟嗗搧璇勮 */
+.goodsEvaluate{margin-bottom: 60px;}
+.goodsEvaluate h3{font-size:22px; font-weight: bold; background: url("../images/editIco.png") no-repeat left top; height: 24px; line-height: 24px; padding-left:36px; margin:24px 0 18px 0;}
+.evaluateMain{border: 1px solid #d5d5d5; padding: 65px 0;}
+#star{width:200px; margin-top: 10px;}
+#star ul{height:14px;}
+#star li{width:16px; margin-right:5px; height:14px; background:url(../images/evaluateStarGray.png) no-repeat; float: left;}
+#star li a{}
+#star li.on{background:url(../images/evaluateStar.png) no-repeat;}
+.evaluateTable td{padding:5px;}
+.evaluateLeft{text-align: right;}
+.evaluateTable .goodsMsgTd span{display: block; margin:50px 0 0 120px; font-size: 12px;}
+.evaluateText{width:720px; height: 150px; float: left; border: 1px solid #d5d5d5; resize: none; padding: 5px;}
+span.uploadTips{margin-top:40px;}
+.lastTr td{padding-bottom:40px;}
+
+.modalOrder{padding: 0 !important;}
+.modalOrder h2{font-size: 18px; text-align: center; font-weight: normal; padding: 30px 0 !important;}
+.modalButton{width:100%; overflow: hidden; border-top: 1px solid #d5d5d5;}
+.modalButton a{width:50%; float: left; display: block; text-align: center; line-height: 55px; height: 55px; font-size: 16px;}
+.uploadImg{width:60px; height: 60px; float: left; border: 1px solid #d5d5d5; margin-right: 10px;}
+
+
+.editAddressModal .tdAttr{width:25%;}
+.editAddressModal .editMsgTable{margin: 30px auto;}
+.editAddressModal .msgChose > label{width:auto; padding-left: 20px; margin-top:10px;}
+.editAddressModal td .saveMsg{margin-top: 15px;}
+
+.tipsRow{width:100%; float:left; margin-top:15px; line-height:32px;}
+.tipsRow span{float:left;}
+.tipsWord{float:left; margin-left:10px;}

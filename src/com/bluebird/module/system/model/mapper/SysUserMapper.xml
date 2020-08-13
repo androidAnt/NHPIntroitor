@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 系统用户相关mapper SQL -->
+<mapper namespace="com.bluebird.module.system.service.impl.SysUserServiceImpl">
+    <!-- 后台用户登录验证 -->
+    <select id="getSysUserByLoginName" parameterType="string" resultType="com.bluebird.module.system.model.SysUser">
+		SELECT a.suId,a.login_name loginName,a.phone,a.password,a.state,a.type,a.real_name realName,a.headPortrait,a.orgId,a.roleId,a.gender,a.identity,
+				b.role_name AS roleName,a.is_member AS isMember<!-- ,c.org_name AS orgName -->
+		FROM sys_user a
+		LEFT JOIN sys_role b ON  b.roleId=a.roleId
+		<!-- LEFT JOIN sys_org c ON  c.orgId=a.orgId -->
+		WHERE a.login_name=#{loginName}
+	</select>
+
+	<!-- 根据主键获取用户详细信息 -->
+	<select id="getById" parameterType="string"  resultType="com.bluebird.module.system.model.SysUser">
+		SELECT a.suId,a.login_name loginName,a.real_name realName,a.type,a.orgId,a.state,a.age,a.gender,a.email,a.phone,a.address,
+		a.headPortrait,a.remark,a.ID_card AS idCard,a.create_date AS createDate,b.org_name AS orgName ,
+		c.role_name AS roleName,c.roleId,identity,user_sort as sort,a.is_member AS isMember,
+		SUBSTR(a.birthday,1,10) AS birthday,a.nation,a.birthplace,a.education,a.wage,a.political_status as politicalStatus,a.hometown,a.position,a.opinion
+		FROM  sys_user a
+		LEFT JOIN sys_role c ON c.roleId=a.roleId
+		LEFT JOIN sys_org b ON b.orgId=a.orgId
+		WHERE  a.suId =#{suId}
+	</select>
+
+	<!-- 根据条件获取用户条数 -->
+	<select id="getUserCountByOrgIds" parameterType="map" resultType="java.lang.Integer">
+		SELECT COUNT(suId) AS tatoel
+		FROM  sys_user
+		WHERE 1=1
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(searchName)">
+			<bind name="searchName" value="'%' + searchName + '%'" />
+			AND (login_name LIKE #{searchName}  or real_name LIKE #{searchName} )
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(loginName)">
+			<bind name="loginName" value="'%' + loginName + '%'" />
+			AND login_name LIKE #{loginName}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(realName)">
+			<bind name="realName" value="'%' + realName + '%'" />
+			AND real_name LIKE #{realName}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+			AND orgId=#{orgId}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(roleId)">
+			AND roleId=#{roleId}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+			AND state=#{state}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isMember)">
+			AND is_member=#{isMember}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(startDate)">
+			AND create_date BETWEEN #{startDate} AND #{endDate}
+		</if>
+	</select>
+
+	<!-- 根据条件获取用户列表 -->
+	<select id="getUserListByOrgIds" parameterType="map" resultType="com.bluebird.module.system.model.SysUser">
+	<!-- b.org_name orgName -->
+		SELECT a.suId,a.memberFile, a.login_name loginName,a.gender,a.political_status as politicalStatus,a.real_name realName,a.type,a.state,a.phone,a.email,a.create_date createDate,identity,c.role_name roleName,c.roleId
+		FROM  sys_user a
+		LEFT JOIN sys_role c ON c.roleId=a.roleId
+		<!-- ,sys_org b -->
+		<!--WHERE a.orgId=b.orgId AND a.orgId ${orgIds} -->
+		WHERE 1=1
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(searchName)">
+		<bind name="searchName" value="'%' + searchName + '%'" />
+		AND (login_name LIKE #{searchName}  or real_name LIKE #{searchName} )
+	</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(loginName)">
+			<bind name="loginName" value="'%' + loginName + '%'" />
+			AND login_name LIKE #{loginName}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(realName)">
+			<bind name="realName" value="'%' + realName + '%'" />
+			AND real_name LIKE #{realName}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+			AND a.orgId=#{orgId}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(roleId)">
+			AND a.roleId=#{roleId}
+		</if>
+	  <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(type)">
+			AND a.type=#{type}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+			AND a.state=#{state}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isMember)">
+			AND a.is_member=#{isMember}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(startDate)">
+			AND a.create_date BETWEEN #{startDate} AND #{endDate}
+		</if>
+		ORDER BY ${sort}
+	</select>
+	
+	
+	<select id="getMemberListByOrgIds" parameterType="map" resultType="com.bluebird.module.system.model.SysUser">
+		SELECT a.suId,a.memberFile, a.login_name loginName,a.gender,a.political_status as politicalStatus,a.real_name realName,a.phone,a.create_date createDate,identity,c.role_name roleName,c.roleId
+		FROM  sys_user a
+		LEFT JOIN sys_role c ON c.roleId=a.roleId
+		LEFT JOIN sys_org b ON b.orgId=a.orgId
+		WHERE a.orgId IN (SELECT orgId FROM sys_org WHERE levels >=#{orgLevels})
+		<!-- WHERE 1=1 -->
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(searchName)">
+		<bind name="searchName" value="'%' + searchName + '%'" />
+		AND (login_name LIKE #{searchName}  or real_name LIKE #{searchName} )
+	</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(loginName)">
+			<bind name="loginName" value="'%' + loginName + '%'" />
+			AND login_name LIKE #{loginName}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(realName)">
+			<bind name="realName" value="'%' + realName + '%'" />
+			AND real_name LIKE #{realName}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+			AND a.orgId=#{orgId}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+			AND a.state=#{state}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isMember)">
+			AND a.is_member=#{isMember}
+		</if>
+		ORDER BY ${sort}
+	</select>
+	
+	<select id="getMemberCountByOrgIds" parameterType="map" resultType="java.lang.Integer">
+		SELECT COUNT(suId) AS tatoel
+		FROM  sys_user
+		WHERE  orgId IN (SELECT orgId FROM sys_org WHERE levels >=#{orgLevels})
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(searchName)">
+			<bind name="searchName" value="'%' + searchName + '%'" />
+			AND (login_name LIKE #{searchName}  or real_name LIKE #{searchName} )
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(loginName)">
+			<bind name="loginName" value="'%' + loginName + '%'" />
+			AND login_name LIKE #{loginName}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(realName)">
+			<bind name="realName" value="'%' + realName + '%'" />
+			AND real_name LIKE #{realName}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+			AND orgId=#{orgId}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(roleId)">
+			AND roleId=#{roleId}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+			AND state=#{state}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isMember)">
+			AND is_member=#{isMember}
+		</if>
+	</select>
+	
+	<select id="viewNoComUserInfoList" parameterType="map" resultType="com.bluebird.module.system.model.SysUser">
+		SELECT a.suId,a.gender,a.real_name as realName,a.phone,a.position,a.political_status as politicalStatus,a.create_date as createDate
+		FROM  sys_user a
+		WHERE  suId not in (SELECT DISTINCT USERId FROM tb_epidemic WHERE  LEFT(creat_date, 10)=#{createDate})
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(realName)">
+			<bind name="realName" value="'%' + realName + '%'" />
+			AND real_name LIKE #{realName}
+		</if>
+		
+		ORDER BY ${sort}
+	</select>
+	
+	<select id="viewNoComUserInfoCount" parameterType="map" resultType="java.lang.Integer">
+		SELECT COUNT(suId) AS tatoel
+		FROM  sys_user
+		WHERE  suId not in (SELECT DISTINCT USERId FROM tb_epidemic WHERE  LEFT(creat_date, 10)=#{createDate})
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(realName)">
+			<bind name="realName" value="'%' + realName + '%'" />
+			AND real_name LIKE #{realName}
+		</if>
+
+	</select>
+	
+    <!-- 查询所有检验人员名称 -->
+    	<select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.system.model.SysUser">
+		SELECT a.suId,a.login_name loginName,a.real_name realName,a.type,a.state,a.phone,a.email,a.create_date createDate,identity,c.role_name roleName,c.roleId
+		FROM  sys_user a
+		LEFT JOIN sys_role c ON c.roleId=a.roleId
+		WHERE 1=1
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(searchName)">
+		<bind name="searchName" value="'%' + searchName + '%'" />
+		AND (login_name LIKE #{searchName}  or real_name LIKE #{searchName} )
+	</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(loginName)">
+			<bind name="loginName" value="'%' + loginName + '%'" />
+			AND login_name LIKE #{loginName}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(realName)">
+			<bind name="realName" value="'%' + realName + '%'" />
+			AND real_name LIKE #{realName}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+			AND a.orgId=#{orgId}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(roleId)">
+			AND a.roleId=#{roleId}
+		</if>
+	  <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(type)">
+			AND a.type=#{type}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isMember)">
+			AND a.is_member=#{isMember}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+			AND a.state=#{state}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(startDate)">
+			AND a.create_date BETWEEN #{startDate} AND #{endDate}
+		</if>
+	</select>
+	<!-- 添加用户信息 -->
+	<insert id="saveSysUser" parameterType="com.bluebird.module.system.model.SysUser">
+		<![CDATA[
+            INSERT INTO sys_user (suId,identity,login_name,password,real_name,age,gender,email,phone,address,headPortrait,state,type,ID_card,create_date,remark,user_sort,orgId)
+     		VALUES (#{suId},#{identity},#{loginName},#{password},#{realName},#{age},#{gender},#{email},#{phone},#{address},#{headPortrait},#{state},#{type},#{idCard},#{createDate},#{remark},#{sort},#{orgId})
+        ]]>
+	</insert>
+
+	<!-- 添加商户用户信息 -->
+	<insert id="saveSellerSysUser" parameterType="com.bluebird.module.system.model.SysUser">
+		<![CDATA[
+            INSERT INTO sys_user (suId,identity,login_name,password,real_name,age,gender,email,phone,address,headPortrait,orgId,roleId,state,ID_card,create_date,remark)
+     		VALUES (#{suId},#{identity},#{loginName},#{password},#{realName},#{age},#{gender},#{email},#{phone},#{address},#{headPortrait},#{orgId},#{roleId},#{state},#{idCard},#{createDate},#{remark})
+        ]]>
+	</insert>
+
+	<!-- 修改用户信息 -->
+	<update id="updateSysUser" parameterType="com.bluebird.module.system.model.SysUser">
+		UPDATE sys_user
+		<set>
+			<!-- <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(loginName)">
+				login_name = #{loginName},
+			</if> -->
+			<if test="realName!=null">
+				real_name = #{realName},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(age)">
+				age = #{age},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gender)">
+				gender = #{gender},
+			</if>
+			<if test="email!=null">
+				email = #{email},
+			</if>
+			<if test="phone!=null">
+				phone = #{phone},
+			</if>
+			<if test="address!=null">
+				address = #{address},
+			</if>
+			<if test="roleId!=null">
+				roleId = #{roleId},
+			</if>
+			<if test="idCard!=null">
+				ID_card = #{idCard},
+			</if>
+			<if test="nation!=null">
+				nation = #{nation},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(headPortrait)">
+				headPortrait = #{headPortrait},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+				orgId = #{orgId},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(type)">
+				type = #{type},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(lastDate)">
+				last_date = #{lastDate},
+			</if>
+			<if test="remark!=null">
+				remark = #{remark},
+			</if>
+			<if test="sort!=null">
+				user_sort = #{sort},
+			</if>
+			
+			<if test="isMember!=null">
+				is_member = #{isMember},
+			</if>
+			
+			<if test="opinion!=null">
+				opinion = #{opinion},
+			</if>
+			<if test="birthday!=null">
+				birthday = #{birthday},
+			</if>
+			<if test="birthplace!=null">
+				birthplace = #{birthplace},
+			</if>
+			<if test="education!=null">
+				education = #{education},
+			</if>
+			<if test="wage!=null">
+				wage = #{wage},
+			</if>
+			<if test="politicalStatus!=null">
+				political_status = #{politicalStatus},
+			</if>
+			<if test="hometown!=null">
+				hometown = #{hometown},
+			</if>
+			<if test="position!=null">
+				position = #{position},
+			</if>
+			<if test="memberFile!=null">
+				memberFile = #{memberFile}
+			</if>
+		</set>
+		WHERE  suId=#{suId}
+	</update>
+	<update id="updatePwd" parameterType="com.bluebird.module.system.model.SysUser">
+		UPDATE sys_user SET password=#{password} WHERE  suId=#{suId}
+	</update>
+	<!-- 根据主键删除用户 -->
+	<delete id="delUserBySuId" parameterType="string">
+		DELETE FROM sys_user WHERE suId=#{suId}
+	</delete>
+
+	<select id="getLastDate" parameterType="string" resultType="com.bluebird.module.system.model.SysUser">
+		SELECT ip AS loginIp,login_date AS lastDate FROM  sys_login_log WHERE success=1 AND content='成功登录系统' AND suId=#{suId}  ORDER BY login_date DESC LIMIT 0,1
+	</select>
+   <select id="getUserCount" parameterType="map" resultType="java.lang.Integer">
+		  SELECT
+				COUNT(a.suId) AS count
+			FROM
+				sys_user a
+	     <where>
+           <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(loginName)">
+                AND a.login_name=#{loginName}
+           </if>
+           <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(password)">
+                AND a.password=#{password}
+           </if>
+        </where>
+      </select>
+      
+      <!-- 会员统计 -->
+      <select id="memberStatisticsByOrg" parameterType="Integer" resultType="com.bluebird.module.system.model.SysUser">
+	      SELECT COUNT(u.orgId) AS value ,o.org_name AS name FROM sys_user u
+		  LEFT JOIN sys_org o  ON  u.orgId = o.orgId
+		  WHERE u.orgId in (SELECT orgId FROM sys_org WHERE levels >=#{orgLevels}) AND u.is_member='0' GROUP BY u.orgId
+      </select>
+      
+        <select id="getCurrTotalNum" parameterType="map" resultType="java.lang.Integer">
+		  SELECT
+				COUNT(a.suId) AS count
+			FROM
+				sys_user a
+	     <where>
+           <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(password)">
+           		LEFT(a.create_date, 10)<![CDATA[ <= ]]>#{createDate}
+                <!-- <![CDATA[ LEFT(a.create_date, 10)<#{createDate}]]> -->
+           </if>
+        </where>
+      </select>
+      
+</mapper>

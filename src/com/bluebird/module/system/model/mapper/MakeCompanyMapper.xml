@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.system.service.impl.MakeCompanyServiceImpl">
+    <!-- 保存生产厂家信息 -->
+    <insert id="saveSelective" parameterType="com.bluebird.module.system.model.MakeCompany">
+        insert into tb_make_company
+        <!-- 分割 -->
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyId)">make_company_id,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyNo)">make_company_no,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyName)">make_company_name,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyAddress)">make_company_address,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(linkName)">link_name,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(phone)">phone,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(email)">email,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">delete_flag,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createUser)">create_user,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createDate)">create_date,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyId)">#{makeCompanyId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyNo)">#{makeCompanyNo},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyName)">#{makeCompanyName},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyAddress)">#{makeCompanyAddress},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(linkName)">#{linkName},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(phone)">#{phone},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(email)">#{email},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">#{deleteFlag},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createUser)">#{createUser},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createDate)">#{createDate},</if>
+        </trim>
+    </insert>
+   <!-- 查询单个生产厂家信息 -->
+    <select id="getByCondition" parameterType="map" resultType="com.bluebird.module.system.model.MakeCompany">
+			    SELECT
+				a.make_company_id AS makeCompanyId,
+				a.make_company_no AS makeCompanyNo,
+				a.make_company_name AS makeCompanyName,
+				a.make_company_address AS makeCompanyAddress,
+				a.link_name AS linkName,
+				a.phone AS phone,
+				a.email AS email,
+				a.delete_flag AS deleteFlag,
+				a.create_user AS createUser,
+				a.create_date AS createDate
+			FROM
+				tb_make_company  a
+             <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyId)">
+                AND a.make_company_id=#{makeCompanyId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyName)">
+                 AND a.make_company_name = #{makeCompanyName}
+            </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyNo)">
+                 AND a.make_company_no = #{makeCompanyNo}
+            </if>
+              AND delete_flag = '0'
+        </where>
+    </select>
+    <!-- 查询生产厂家列表 -->
+    <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.system.model.MakeCompany">
+			 SELECT
+				a.make_company_id AS makeCompanyId,
+				a.make_company_no AS makeCompanyNo,
+				a.make_company_name AS makeCompanyName,
+				a.make_company_address AS makeCompanyAddress,
+				a.link_name AS linkName,
+				a.phone AS phone,
+				a.email AS email,
+				a.delete_flag AS deleteFlag,
+				a.create_user AS createUser,
+				a.create_date AS createDate
+			FROM
+				tb_make_company  a
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyId)">
+                make_company_id=#{makeCompanyId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyNo)">
+               AND make_company_no=#{makeCompanyNo}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyName)">
+                AND make_company_name LIKE "%"#{makeCompanyName}"%"
+            </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyAddress)">
+               AND make_company_address LIKE "%"#{makeCompanyAddress}"%"
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(linkName)">
+                AND link_name LIKE "%"#{linkName}"%"
+            </if>
+              <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(phone)">
+                AND phone=#{phone}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(email)">
+                AND email=#{email}
+            </if>
+                AND delete_flag='0'
+        </where>
+             order by create_date DESC
+    </select>
+    <!-- 查询总数 -->
+    <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+        SELECT count(make_company_id)
+        FROM tb_make_company
+              <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyId)">
+                make_company_id=#{makeCompanyId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyNo)">
+                AND make_company_no=#{makeCompanyNo}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyName)">
+                AND make_company_name LIKE "%"#{makeCompanyName}"%"
+            </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyAddress)">
+               AND make_company_address LIKE "%"#{makeCompanyAddress}"%"
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(linkName)">
+                AND link_name LIKE "%"#{linkName}"%"
+            </if>
+              <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(phone)">
+                AND phone=#{phone}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(email)">
+                AND email=#{email}
+            </if>
+                AND delete_flag='0'
+        </where>
+        
+    </select>
+    <!-- 修改生产厂家信息 -->
+    <update id="updateSelective" parameterType="com.bluebird.module.system.model.MakeCompany">
+        UPDATE tb_make_company
+        <set>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyId)">
+                make_company_id=#{makeCompanyId},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyNo)">
+                make_company_no=#{makeCompanyNo},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyName)">
+                 make_company_name=#{makeCompanyName},
+            </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyAddress)">
+                 make_company_address=#{makeCompanyAddress},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(linkName)">
+                 link_name=#{linkName},
+            </if>
+              <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(phone)">
+                 phone=#{phone},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(email)">
+                 email=#{email},
+            </if>
+        </set>
+      WHERE make_company_id=#{makeCompanyId}
+    </update>
+    
+    <!-- 删除 -->
+    	<update id="delete" parameterType="String">
+			update tb_make_company
+		<set>
+			delete_flag = '1'
+		</set>
+		<where>
+			make_company_id=#{makeCompanyId}
+		</where>
+	</update>
+</mapper>

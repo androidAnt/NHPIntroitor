@@ -1,0 +1,495 @@
+<%@ page import="com.bluebird.framework.constant.SystemConstant"  %>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page isELIgnored="false" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags"%>
+<c:set var="sysUser" value="<%= session.getAttribute(SystemConstant.SYS_USER_SESSION_KEY)%>"></c:set>
+
+
+<c:set var="root" value="${pageContext.request.contextPath}"/>
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <meta charset="utf-8"/>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title><%=SystemConstant.SYS_NAME%></title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+        <link rel="stylesheet" href="${root}/components/bootstrap/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="${root}/components/ace/css/font.min.css"/>
+        <link rel="stylesheet" href="${root}/components/ace/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style"/>
+        <link rel="stylesheet" href="${root}/components/croppic/css/croppic.css"/>
+        <link rel="shortcut icon" href="${root}/logo.png" type="image/x-icon"/>
+        <script src="${root}/components/ace/js/ace-extra.js"></script>
+        <script type="text/javascript">
+            var root = "${root}";
+        </script>
+        <style>
+            .my_modal-body {
+                height: 460px;
+                overflow-x: hidden;
+                overflow-y: auto;
+            }
+            .navbar{
+            	background-image: url(${root}/img/system/login/bannertupian.jpg);
+            }
+        </style>
+    </head>
+    <body class="no-skin">
+        <div id="modal-ProfilePwd" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">修改密码</h4>
+                    </div>
+                    <div class="modal-body">
+                        <form id="modal-ProfilePwdForm" class="form-horizontal">
+                            <div class="form-group">
+                                <label for="profilepwd_pwd" class="col-md-2 control-label col-xs-5">密码：</label>
+                                <div class="col-md-10 col-xs-7">
+                                    <input type="password" class="form-control" name="oldPwd" id="profilepwd_pwd" maxlength="20"  placeholder="现在使用的密码">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="profilepwd_newpwd" class="col-md-2 control-label col-xs-5">新密码：</label>
+                                <div class="col-md-10 col-xs-7">
+                                    <input type="password" class="form-control" name="newPwd" id="profilepwd_newpwd" maxlength="20"  placeholder="新密码">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile_age" class="col-md-2 control-label col-xs-5">确认密码：</label>
+                                <div class="col-md-10 col-xs-7">
+                                    <input type="password" class="form-control" name="realName" id="profilepwd_newpwd0" maxlength="20"  placeholder="确认新密码">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+                        <button type="button" class="btn btn-primary btn-sm">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="modal-Profile" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <!-- <form id="modal-ProfileForm" action="${root}/system/person/update" class="form-horizontal" novalidate="true"> -->
+                <form action="javascript:doSubmit()"  class="form-horizontal" method="post" id="modal-ProfileForm" >
+                    <input type="hidden" name="headPortrait" id="profile_headPortrait">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">个人信息维护</h4>
+                        </div>
+                        <div class="modal-body">
+                            <label class="loading" ><img src="${root}/components/ztree/css/img/loading.gif">正在加载数据请稍后...</label>
+                            <%-- <div class="form-group" style="width: 240px;margin: auto;text-align: center;">
+                                <div id="profileShowImgDiv" class="hide">
+                                    <img src="${root}/img/system/photo.jpg" class="img-thumbnail profile_" width="100%">
+                                </div>
+                                <div id="profileCroppic">
+                                    <img src="${root}/img/system/photo.jpg" class="img-thumbnail profile_" width="100%">
+                                </div>
+                                <div>
+                                    <p>(240*240比例)<p/>
+                                    <button class="btn btn-xs btn-success" id="profileUploadImg" type="button">
+                                        <i class="ace-icon fa fa-upload bigger-120"></i>上传头像
+                                    </button>
+                                </div>
+                            </div> --%>
+                            <div class="form-group">
+                                <label for="profile_loginName" class="col-md-2 control-label col-xs-5">登录名称：</label>
+                                <div class="col-md-10 col-xs-7">
+                                    <p class="form-control-static" id="profile_loginName"></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="profile_realName" class="col-md-2 control-label col-xs-5">真实名称：</label>
+                                <div class="col-md-10 col-xs-7">
+                                    <input type="text" class="form-control" name="realName" required id="profile_realName" maxlength="20"  placeholder="真实名称">
+                                </div>
+                            </div>
+                            <!-- <div class="form-group">
+                                <label for="profile_age" class="col-md-2 control-label col-xs-5">年龄：</label>
+                                <div class="col-md-10 col-xs-7">
+                                    <input type="number" min="0" max="200" class="form-control" name="age" id="profile_age" step="1" maxlength="3" placeholder="年龄" >
+                                </div>
+                            </div>  -->
+                            <!-- <div class="form-group">
+                                <label for="profile_gender" class="col-md-2 control-label col-xs-5">性别：</label>
+                                <div class="col-md-10 col-xs-7">
+                               <label class="radio-inline" style="padding-top: 4px;">
+                                        <input type="radio" name="gender" id="profile_gender" value="0"/>男
+                                    </label>
+                                    <label class="radio-inline" style="padding-top: 4px;margin-left: 23px;">
+                                        <input type="radio" name="gender" value="1"/>女
+                                    </label>
+                                </div>
+                            </div> -->
+                            <!-- <div class="form-group">
+                                <label for="profile_orgName" class="col-md-2 control-label col-xs-5">所属部门：</label>
+                                <div class="col-md-10 col-xs-7">
+                                    <p class="form-control-static" id="profile_orgName"></p>
+                                </div>
+                            </div> -->
+                            <div class="form-group">
+                                <label for="profile_roleNames" class="col-md-2 control-label col-xs-5">拥有角色：</label>
+                                <div class="col-md-10 col-xs-7">
+                                    <p class="form-control-static" id="profile_roleNames"></p>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group">
+                                <label for="profile_email" class="col-md-2 control-label col-xs-5">邮箱地址：</label>
+                                <div class="col-md-10 col-xs-7">
+                                    <input type="email" class="form-control" name="email" id="profile_email" maxlength="40" placeholder="邮箱地址">
+                                </div>
+                            </div> -->
+                            <div class="form-group">
+                                <label for="profile_phone" class="col-md-2 control-label col-xs-5">联系电话：</label>
+                                <div class="col-md-10 col-xs-7">
+                                    <input type="text" class="form-control" name="phone" id="profile_phone" maxlength="11" placeholder="电话号码"
+                                    required pattern="([1][3,4,5,7,8][0-9]{9})$" title="请输入正确的电话号码"/>
+                                </div>
+                            </div>
+                            <!-- <div class="form-group">
+                                <label for="profile_address" class="col-md-2 control-label col-xs-5">联系地址：</label>
+                                <div class="col-md-10 col-xs-7">
+                                    <input type="text" class="form-control" name="address" id="profile_address" maxlength="125" placeholder="联系地址">
+                                </div>
+                            </div> -->
+                            <!-- <div class="form-group">
+                                <label for="profile_remark" class="col-md-2 control-label col-xs-5">备注信息：</label>
+                                <div class="col-md-10 col-xs-7">
+                                    <input type="text" class="form-control" name="remark" id="profile_remark" maxlength="125" placeholder="备注信息">
+                                </div>
+                            </div> -->
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">关闭</button>
+                            <button type="submit" class="btn btn-primary btn-sm">修改</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!--顶部界面-->
+        <div id="navbar" class="navbar navbar-default navbar-fixed-top">
+            <div class="navbar-container" id="navbar-container" style="padding-right: 0px;">
+                <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+                    <span class="sr-only">菜单</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="navbar-header pull-left">
+                    <a href="#" class="navbar-brand">
+                        <small><img src="${root}/logo.png" class="img-rounded" style="height: 23px;">
+                            <%=SystemConstant.SYS_NAME%>
+                        </small>
+                    </a>
+                </div>
+                <div class="navbar-buttons navbar-header pull-right" role="navigation">
+                    <ul class="nav ace-nav">
+                        <li class="light-blue">
+                            <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                <c:if test="${not empty sysUser.headPortrait}">
+                                    <img class="nav-user-photo" src="${root}${sysUser.headPortrait}"/>
+                                </c:if>
+                                <c:if test="${empty sysUser.headPortrait}">
+                                    <c:if test="${sysUser.gender==1}">
+                                        <img class="nav-user-photo" src="${root}/img/system/girl.png"/>
+                                    </c:if>
+                                    <c:if test="${sysUser.gender!=1}">
+                                        <img class="nav-user-photo" src="${root}/img/system/boy.png"/>
+                                    </c:if>
+                                </c:if>
+                                <span class="user-info"><small>欢迎你,</small>
+                                <c:if test="${not empty sysUser.realName}">${sysUser.realName}</c:if>
+                                <c:if test="${empty sysUser.realName}">${sysUser.loginName}</c:if>
+                                </span>
+                                <i class="ace-icon fa fa-caret-down"></i>
+                            </a>
+                            <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close"
+                                style="margin-right: 5px;">
+                                <li><a href="#modal-Profile" id="modal-profile2info" data-toggle="modal" data-backdrop="static"><i
+                                        class="ace-icon fa fa-user"></i>个人信息</a></li>
+                                <li><a href="#modal-ProfilePwd" id="modal-profile2pwd" data-toggle="modal" data-backdrop="static"><i
+                                        class="ace-icon fa fa-key"></i>修改密码</a></li>
+                                <li class="divider"></li>
+                                <li><a href="${root}/system/outLogin"><i class="ace-icon fa fa-sign-out"></i> 安全退出</a></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-------------------------------------------------------------------------------------------------->
+        <!--中间界面-->
+        <div class="main-container" id="main-container">
+            <div class="sidebar responsive sidebar-fixed sidebar-scroll" id="sidebar" data-sidebar="true" data-sidebar-scroll="true" data-sidebar-hover="true"><!--左侧操作菜单-->
+                <ul class="nav nav-list">
+                    <li id="home-li-active">
+                        <a href="${root}/system/" class="selectMenu">
+                            <i class="menu-icon fa fa-home"></i>
+                            <span class="menu-text">首页</span>
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <c:forEach items="${sysUser.menuVos}" var="menu" varStatus="status">
+                        <c:if test="${menu.type==1}">
+                            <c:if test="${status.index!=0}"></ul></li></c:if>
+                            <li>
+                                <a href="javascript:void(0);" class="dropdown-toggle">
+                                    <i class="menu-icon ${menu.icon }" data-icon="${menu.icon }"></i>
+                                    <span class="menu-text">${menu.menuName }</span>
+                                    <b class="arrow fa fa-angle-down"></b>
+                                </a>
+                                <b class="arrow"></b>
+                            <ul class="submenu">
+                        </c:if>
+                        <c:if test="${menu.type==2}">
+                            <li id="${menu.menuId }">
+                                <a href="javascript:void(0);" class="selectMenu" data-href="${root }/${menu.content }">
+                                    <i class="menu-icon fa fa-caret-right "></i>
+                                        <label style="cursor: pointer;" for="${menu.menuId }">${menu.menuName }</label>
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                        </c:if>
+                    </c:forEach></ul></li>
+                </ul>
+                <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse" style="z-index: 1;">
+                    <i class="ace-icon fa fa-angle-double-left" data-icon1="ace-icon fa fa-angle-double-left"
+                       data-icon2="ace-icon fa fa-angle-double-right"></i>
+                </div>
+            </div>
+            <!-------------------------------------------------------------------------------------------------->
+            <!--正文界面-->
+            <div class="main-content">
+                <div class="main-content-inner">
+                    <div  id="prelude_msg" hidden>${msg}</div>
+                    <script src="${root}/components/jquery/jquery.min.js"></script>
+                    <script src="${root}/components/bootstrap/js/bootstrap.min.js"></script>
+                    <script src="${root}/components/ace/js/ace.min.js"></script>
+                    <script src="${root}/components/ace/js/ace-elements.min.js"></script>
+                    <script src="${root}/components/croppic/js/croppic.js"></script>
+                    <link rel="stylesheet" href="${root}/components/messenger/messenger.css"/>
+                    <link rel="stylesheet" href="${root}/components/messenger/messenger-theme-future.css"/>
+                    <script src="${root}/components/messenger/messenger.min.js"></script>
+                    <script type="text/javascript">
+                        var root = "${root}";
+                        function showMes(type,msg,times){
+                            var typeStr='success';
+                            if(type==0){
+                                typeStr='error';
+                            }
+                            if(!times){
+                                times=5;
+                            }
+                            Messenger().post({
+                                message: msg,
+                                type: typeStr,
+                                hideAfter: times,
+                                showCloseButton: true
+                            });
+                        }
+                        var msgItem=sessionStorage.getItem("msgItem");
+                        if(msgItem&&msgItem!=''){
+                            var obj = eval('(' + msgItem + ')');
+                            showMes(obj.status,obj.msg);
+                            sessionStorage.removeItem("msgItem");
+                        }
+                        $(document).ready(function() {
+                            $('.selectMenu').click(function(){
+                                var id = $(this).parents('li').attr("id");
+                                sessionStorage.setItem("selectMenu",id);
+                            });
+                            $('.selectMenu').find('label').click(function () {
+                                window.location.href=$(this).parents('a').attr('data-href');
+                            });
+                            var selectMenu = sessionStorage.getItem("selectMenu");
+                            if(selectMenu&&selectMenu!='no-select'){
+                                if('home-li-active'==selectMenu){
+                                    $('#home-li-active').addClass("active");
+                                    $("#breadcrumbs .breadcrumb").html('<li><i class="ace-icon fa fa-home home-icon"></i> <span>首页</span></li>');
+                                }else{
+                                    $("#"+selectMenu).parents('li').addClass('open');
+                                    $("#"+selectMenu).parents('li').addClass("active");
+                                    $("#"+selectMenu).addClass("active");
+                                    $("#breadcrumbs .breadcrumb").html('<li>'+
+                                            '<i class="ace-icon '+$("#"+selectMenu).parents('li').find('i').attr('data-icon')+'"></i> <span>'
+                                            +$("#"+selectMenu).parents('li').find('span').html()+'</span></li>'+
+                                            '<li class="active">'+$("#"+selectMenu).find('.selectMenu label').html()+'</li>');
+                                    $(document).attr("title",$(document).attr("title")+" "+$("#"+selectMenu).parents('li').find('span').html()+":"+$("#"+selectMenu).find('.selectMenu label').html());
+                                }
+                            }else{
+                                $("#breadcrumbs .breadcrumb").html('<li><i class="ace-icon fa fa-home home-icon"></i> <span>首页</span></li>');
+                                $('#home-li-active').addClass("active");
+                            }
+                            Messenger.options = {
+                                extraClasses: 'messenger-fixed messenger-on-bottom messenger-on-right'
+                            }
+                            if($("#prelude_msg").html()!=""){
+                                var prelude_obj = eval('(' + $("#prelude_msg").html() + ')');
+                                showMes(prelude_obj.status,prelude_obj.msg);
+                            }
+                            //初始化个人信息form
+                            function profileForm(data) {
+                                $('#modal-Profile .modal-body').find('.loading').hide();
+                                $("#profile_loginName").html(data.loginName);
+                                $("#profile_orgName").html(data.orgName);
+                                $("#profile_roleNames").html(data.roleName);
+                                $("#profile_realName").val(data.realName);
+                                $("#profile_age").val(data.age);
+                                /* $('input:radio[name=gender]')[0].checked = true;
+                                if(data.gender==1){
+                                    $('input:radio[name=gender]')[1].checked = true;
+                                } */
+                                if(data.headPortrait&&data.headPortrait!=""){
+                                    $(".profile_").attr('src',root+data.headPortrait);
+                                }
+                                $("#profile_email").val(data.email);
+                                $("#profile_phone").val(data.phone);
+                                $("#profile_address").val(data.address);
+                                $("#profile_remark").val(data.remark);
+                                $('#modal-Profile .modal-body').find('.form-group').show();
+                            }
+                            //个人信息维护准备
+                            $("#modal-profile2info").click(function () {
+                                $('#modal-Profile .modal-body').find('.form-group').hide();
+                                $('#modal-Profile .modal-body').find('.loading').show();
+                                $.ajax({
+                                    type: 'POST',
+                                    url: root + '/system/person/userinfo',
+                                    success: function (data) {
+                                        var dataObj = data;
+                                        if (dataObj.status == 0) {
+                                            $('#modal-Profile').modal('hide');
+                                            showMes(dataObj.status, dataObj.msg);
+                                        }else{
+                                            profileForm(dataObj.data);
+                                        }
+                                    },
+                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                        $('#modal-Profile').modal('hide');
+                                        showMes("0", "系统繁忙,请稍后再试");
+                                    }
+                                });
+                            });
+                            //修改头像
+                            var profileCroppicHeaderOptions = {
+                                        cropData:{'fileType':'user/headPortrait'},
+                                imgMaxSize:2,//图片最大2M
+                                outputUrlId: 'profile_headPortrait',//成功后返回的url存放路径
+                                cropUrl: root+'/system/upload/croppic',//裁剪服务器处理路径
+                                customUploadButtonId: 'profileUploadImg',//上传按钮ID
+                                modal: true,//弹出层
+                                processInline: true,//在线加载
+                                rotateControls: false,//旋转
+                                loaderHtml:'<div class="loader bubblingG"><span id="bubblingG_1"></span><span id="bubblingG_2"></span><span id="bubblingG_3"></span></div> ',
+                                onAfterImgCrop:function(data){
+                                    if(data.status==0){
+                                        croppicObj.reset();
+                                        showMes("0",data.msg);
+                                    }else{
+                                        $('.profile_').attr("src",root+data.url);
+                                        $(".cropControlsUpload").before($("#profileShowImgDiv").html());
+                                        profileCroppicHeaderOptions.cropData.headPortrait=data.url;
+                                    }
+                                },
+                                onReset:function(){
+                                    $(".cropControlsUpload").before($("#profileShowImgDiv").html());
+                                },
+                                onError:function(errormessage){
+                                    show("1",errormessage);
+                                }
+                            }
+                            var profileCroppic = new Croppic('profileCroppic', profileCroppicHeaderOptions);
+                            
+                           
+                            
+                            $("#modal-ProfilePwd").find('.btn-primary').click(function () {
+                                if($('#profilepwd_pwd').val()==''){
+                                    $('#profilepwd_pwd').focus();
+                                    showMes("0", "请输入现在使用的密码");
+                                    return false;
+                                }
+                                if($('#profilepwd_newpwd').val()==''){
+                                    $('#profilepwd_newpwd').focus();
+                                    showMes("0", "请输入新密码");
+                                    return false;
+                                }
+                                if($('#profilepwd_newpwd0').val()==''){
+                                    $('#profilepwd_newpwd0').focus();
+                                    showMes("0", "请输入确认密码");
+                                    return false;
+                                }
+                                if($('#profilepwd_newpwd0').val()!=$('#profilepwd_newpwd').val()){
+                                    $('#profilepwd_newpwd0').focus();
+                                    showMes("0", "新密码与确认密码不一致");
+                                    return false;
+                                }
+                                $.ajax({
+                                    type: 'POST',
+                                    url: root + '/system/person/updatepwd',
+                                    data:$("#modal-ProfilePwdForm").serialize(),
+                                    success: function (data) {
+                                        var dataObj = data;
+                                        if (dataObj.status ==1) {
+                                            $("#modal-ProfilePwdForm").find('input').val('');
+                                            $('#modal-ProfilePwd').modal('hide');
+                                        }
+                                        showMes(dataObj.status, dataObj.msg);
+                                    },
+                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                        $('#modal-ProfilePwd').modal('hide');
+                                        showMes("0", "系统繁忙,请稍后再试");
+                                    }
+                                });
+                            });
+                        });
+                        
+                        //修改个人信息
+                        //$("#modal-ProfileForm").find('.btn-primary').click(function () {
+                        function doSubmit() { 
+                            if($('#profile_realName').val()!=''){
+                                $(this).hide();
+                                $.ajax({
+                                    type: 'POST',
+                                    //url: $("#modal-ProfileForm").attr('action'),
+                                    url: root + '/system/person/update',
+                                    data: $("#modal-ProfileForm").serialize(),
+                                    success: function (data) {
+                                        var dataObj = data;
+                                        if (dataObj.status == 1) {
+                                            if($("#profile_headPortrait").val()!=''){
+                                                $('.navbar-header .nav-user-photo').attr("src",root+$("#profile_headPortrait").val());
+                                            }
+                                            if($("#profile_realName").val()!=""){
+                                                $('.navbar-header .user-info').html('<small>欢迎你,</small>'+$("#profile_realName").val());
+                                            }
+                                            $('#modal-Profile').modal('hide');
+                                            $("#modal-ProfileForm").find('.btn-primary').show();
+                                        }else{
+                                            $("#modal-ProfileForm").find('.btn-primary').show();
+                                        }
+                                        showMes(dataObj.status, dataObj.msg);
+                                    },
+                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                        showMes("0", "系统繁忙,请稍后再试");
+                                    }
+                                });
+                            }else{
+                                showMes("0", "请输入真是姓名");
+                            }
+                        }
+                    </script>
+                    <div class="breadcrumbs breadcrumbs-fixed" id="breadcrumbs">
+                        <ul class="breadcrumb"></ul>
+                    </div>
+                    <div class="page-content">

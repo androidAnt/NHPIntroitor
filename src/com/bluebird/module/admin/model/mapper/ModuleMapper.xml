@@ -1,0 +1,614 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.ModuleServiceImpl">
+      <!-- 查询模块划分列表 -->  
+     <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.Module">
+        SELECT
+           a.id AS id,
+           a.top*430 AS top,
+           a.theLeft*800 AS theLeft,
+           a.height*430 AS height,
+           a.width*800 AS width,
+           a.Level1 AS level1,
+           a.Level2 AS level2,
+           a.Level3 AS level3,
+           b.fileRealName AS fileName,
+           b.file_path AS url
+         FROM
+           module a 
+           left join system_file b on a.Level2=b.fileId 
+        <where>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(id)">
+                 a.id = #{id}
+             </if>
+              a.start='0'
+        </where>
+         order by a.num ASC
+      </select>
+      
+     <!-- 模块划分总数 -->  
+        <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+          SELECT count(id)
+          FROM module a
+        <where>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(id)">
+                 a.id = #{id}
+             </if>
+        </where>
+       </select>
+       
+       <!--新增模块划分 -->
+       <insert id="saveSelective" parameterType="com.bluebird.module.admin.model.Module">
+        insert into module
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(id)">id,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(top)">top,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(theLeft)">theLeft,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(height)">height,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(width)">width,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(start)">start,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(level1)">Level1,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">creat_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">creat_user,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(id)">#{id},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(top)">#{top},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(theLeft)">#{theLeft},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(height)">#{height},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(width)">#{width},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(start)">#{start},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(level1)">1,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">#{creatDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">creatUser,</if>
+        </trim>
+    </insert>
+    
+     <!--删除模块划分 -->
+      <update id="delete" parameterType="String">
+         update module
+         <set>
+			start = '3' 
+		 </set>
+		 <where>
+			id=#{id}
+		 </where>
+       </update> 
+       
+       
+     <!--修改模块 -->
+       <update id="updateSelective" parameterType="com.bluebird.module.admin.model.Module">
+         UPDATE module	
+         <set>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(top)">
+               top=#{top},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(theLeft)">
+               theLeft=#{theLeft},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(height)">
+               height=#{height},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(width)">
+               width=#{width},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(level1)">
+               Level1=#{level1},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(level2)">
+               Level2=#{level2},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(level3)">
+               Level3=#{level3},
+            </if>
+         </set>
+               WHERE  id=#{id}
+       </update>
+     <!--批量修改模块 -->
+	<update id="updateList" parameterType="java.util.List">
+		<foreach collection="list" index="index" item="item" separator=";">
+			UPDATE module
+			<set>
+					top=#{item.top},
+					theLeft=#{item.theLeft},
+					height=#{item.height},
+					width=#{item.width},
+					Level1=#{item.level1},
+					Level2=#{item.level2},
+					Level3=#{item.level3},
+					<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(item.num)">
+					num=#{item.num}
+					</if>
+			</set>
+			WHERE id=#{item.id}
+		</foreach>
+	</update>
+	
+	<!--查询默认 -->
+       <select id="toDefaultQuery" parameterType="map" resultType="com.bluebird.module.admin.model.Module">
+        SELECT
+           a.id AS id,
+           a.top AS top,
+           a.theLeft AS theLeft,
+           a.height AS height,
+           a.width AS width,
+           a.Level1 AS level1,
+           a.Level2 AS level2,
+           a.Level3 AS level3,
+           a.num AS num
+         FROM
+           module a 
+        <where>
+              a.start='1'
+        </where>
+      </select>
+      
+        <select id="getContentList" parameterType="map" resultType="com.bluebird.module.admin.model.GhContentManage">
+        SELECT a.contentId,a.content_title as contentTitle,a.creat_user as creatUser,str_to_date(a.creat_date,'%Y-%m-%d') as creatDate,b.contentType_name AS contentTypeName
+        FROM tb_content_manage a 
+		LEFT JOIN tb_content_type b ON a.belong_contentType = b.contentTypeId
+		LEFT JOIN tb_menu c ON b.contentType_menuId= c.menuId
+		<where>
+			a.delete_flag = '0'
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentShow)"> 
+                and a.content_show=#{contentShow}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(articleType)">
+               and b.article_type!=#{articleType}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+                and c.menuId =#{menuId}
+            </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isRelease)">
+                and a.is_release =#{isRelease}
+            </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentTypeId)">
+                and b.contentTypeId =#{contentTypeId}
+            </if>
+		</where>
+		 ORDER BY a.creat_date DESC LIMIT #{num}
+      </select>
+      
+     <select id="getContentImgFileList" parameterType="map" resultType="com.bluebird.module.admin.model.SysFile">
+		 SELECT c.fileId,c.file_path as url,c.fileRealName as name,a.contentId as linkId,a.content_title as linkTitle 
+		 FROM system_file c 
+		 LEFT JOIN tb_content_manage a ON a.imgFileUuid = c.uuid
+		 LEFT JOIN tb_content_type b ON a.belong_contentType = b.contentTypeId         
+		<where>
+			a.delete_flag = '0'
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(imgShow)">
+               and a.img_show=#{imgShow}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(articleType)">
+               and b.article_type=#{articleType}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentTypeId)">
+               and a.belong_contentType =#{contentTypeId}
+            </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isRelease)">
+               and a.is_release =#{isRelease}
+            </if>
+		</where>
+		 ORDER BY a.creat_date DESC 
+      </select>
+      
+      <select id="getContentTypeByMenuId" parameterType="map" resultType="com.bluebird.module.admin.model.GhContentType">
+		SELECT a.contentTypeId,a.contentType_name as contentTypeName,c.menu_Name AS menuName,b.fileId as logoImg  
+		FROM tb_content_type a
+		LEFT JOIN tb_menu c ON a.contentType_menuId = c.menuId
+		left join system_file b on b.uuid=a.logo_img_uuid
+		<where>
+			a.delete_flag = '0'
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+               and a.contentType_menuId=#{menuId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentType)">
+               and a.content_type=#{contentType}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(articleType)">
+               and a.article_type!=#{articleType}
+            </if>
+		</where>
+		ORDER BY a.contentType_sort LIMIT 4 
+      </select>
+       
+        <!-- 查询模块划分首页列表  -->  
+     <select id="selectAll" parameterType="map" resultType="com.bluebird.module.admin.model.Module">
+        SELECT
+           a.id AS id,
+           a.top*#{height}+#{top} AS top,
+           a.theLeft*#{width} AS theLeft,
+           a.height*#{height} AS height,
+           a.width*#{width} AS width,
+           a.Level1 AS level1,
+           a.Level2 AS level2,
+           a.Level3 AS level3,
+           b.fileRealName AS fileName,
+           b.file_path AS url
+         FROM
+           module a 
+           left join system_file b on a.Level2=b.fileId
+        <where>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(id)">
+                 a.id = #{id}
+             </if>
+              a.start='0' and a.Level1 !='0'
+        </where>
+        ORDER BY a.top DESC
+      </select>
+      
+      <!-- 按钮查询 -->
+       <select id="getContentButtonList" parameterType="map" resultType="com.bluebird.module.admin.model.GhContentType">
+         SELECT
+          a.contentTypeId AS contentTypeId,
+          a.contentType_name AS contentTypeName,
+          b.fileId AS logoImg,
+          c.fileId AS backgroundImg
+         FROM
+          tb_content_type a
+         LEFT JOIN system_file b ON a.logo_img_uuid = b.uuid
+         LEFT JOIN system_file c ON a.background_img_uuid = c.uuid
+         <where>
+          a.delete_flag = '0' and a.contentTypeId in 
+        	<foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+	           #{id}
+	        </foreach>
+        </where>
+       </select>
+       
+        <!-- 查询主席信箱 已公开 审核已通过 已回复的 -->
+       <select id="getTbMailbox" parameterType="map" resultType="com.bluebird.module.admin.model.TbMailbox">
+         SELECT
+          a.mailboxId AS mailboxId,
+          a.title AS title,
+          a.content AS content,
+          SUBSTR(a.replier_date,1,7) AS yymm,
+          SUBSTR(a.replier_date,9,2) AS dd
+         FROM
+          tb_mailbox a
+         <where>
+          a.replier_type = '1' and a.auditor_type ='1' and a.publicity='1' and a.delete_flag='0'
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mailboxId)">
+                 AND   a.mailboxId = #{mailboxId}
+          </if>
+        </where>
+         ORDER BY a.replier_date DESC LIMIT ${num}
+       </select>
+       
+        <!-- 查询主席信箱 已公开 审核已通过 已回复的 -->
+       <select id="getListTbMailboxPage" parameterType="map" resultType="com.bluebird.module.admin.model.TbMailbox">
+         SELECT
+          a.mailboxId AS mailboxId,
+          a.title AS title,
+          a.content AS content,
+          SUBSTR(a.replier_date,1,10) AS replierDate
+         FROM
+          tb_mailbox a
+         <where>
+          a.replier_type = '1' and a.auditor_type ='1' and a.publicity='1' and a.delete_flag='0'
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mailboxId)">
+                 AND   a.mailboxId = #{mailboxId}
+          </if>
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">
+                AND    a.creat_user = #{creatUser}
+          </if>
+        </where>
+         ORDER BY a.replier_date DESC 
+       </select>
+       
+       <!-- 查询主席信箱 已公开 审核已通过 已回复的 -->
+       <select id="getCountTbMailboxPage" parameterType="map" resultType="java.lang.Integer">
+         SELECT
+          count(1)
+         FROM
+          tb_mailbox a
+         <where>
+          a.replier_type = '1' and a.auditor_type ='1' and a.publicity='1' and a.delete_flag='0'
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mailboxId)">
+               AND     a.mailboxId = #{mailboxId}
+          </if>
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">
+               AND     a.creat_user = #{creatUser}
+          </if>
+        </where>
+         ORDER BY a.replier_date DESC 
+       </select>
+       
+        <!-- 查询主席信箱  审核已通过 未回复的 -->
+       <select id="getPageListTbMailbox" parameterType="map" resultType="com.bluebird.module.admin.model.TbMailbox">
+         SELECT
+          a.mailboxId AS mailboxId,
+          a.title AS title,
+          a.content AS content,
+          SUBSTR(a.replier_date,1,10) AS replierDate
+         FROM
+          tb_mailbox a
+         <where>
+          a.replier_type = '0' and a.auditor_type ='1' and a.delete_flag='0'
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mailboxId)">
+                 AND   a.mailboxId = #{mailboxId}
+          </if>
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">
+                AND    a.creat_user = #{creatUser}
+          </if>
+        </where>
+         ORDER BY a.replier_date DESC 
+       </select>
+       
+       <!-- 查询主席信箱  审核已通过 未回复的 -->
+       <select id="getPageCountTbMailbox" parameterType="map" resultType="java.lang.Integer">
+         SELECT
+          count(1)
+         FROM
+          tb_mailbox a
+         <where>
+          a.replier_type = '0' and a.auditor_type ='1' and a.delete_flag='0'
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mailboxId)">
+               AND     a.mailboxId = #{mailboxId}
+          </if>
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">
+               AND     a.creat_user = #{creatUser}
+          </if>
+        </where>
+         ORDER BY a.replier_date DESC 
+       </select>
+       
+        <!-- 查询主席信箱详情-->
+       <select id="getTbMailboxByMailboxId" parameterType="map" resultType="com.bluebird.module.admin.model.TbMailbox">
+         SELECT
+          a.mailboxId AS mailboxId,
+          a.title AS title,
+          a.content AS content,
+          c.real_name AS creatUser,
+          a.replier_content AS replierContent,
+          a.auditor_content AS auditorContent,
+          a.replier_type AS replierType,
+          a.auditor_type AS auditorType,
+          b.org_name AS orgName,
+          SUBSTR(a.replier_date,1,10) AS replierDate
+         FROM
+          tb_mailbox a
+          LEFT JOIN sys_org b ON a.orgId = b.orgId
+          LEFT JOIN sys_user c ON a.creat_user = c.suId
+         <where>
+          a.delete_flag='0'
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mailboxId)">
+              AND   a.mailboxId = #{mailboxId}
+          </if>
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">
+               AND    a.creat_user = #{creatUser}
+          </if>
+        </where>
+         ORDER BY a.replier_date DESC 
+       </select>
+       
+       <!-- 职工文化 -->
+       <select id="getCulture" parameterType="map" resultType="com.bluebird.module.admin.model.GhContentType">
+         SELECT
+         a.contentTypeId AS contentTypeId,
+         a.contentType_name AS contentTypeName
+         FROM
+         tb_content_type a
+         <where>
+           a.contentType_menuId='4' AND a.content_type='2'and a.delete_flag = '0' and a.article_type !='0'
+        </where>
+         ORDER BY a.contentType_sort ASC 
+       </select>
+       
+       <!--通过职工文化分类ID获取文章 -->
+       <select id="getCultureList" parameterType="map" resultType="com.bluebird.module.admin.model.GhContentManage">
+        SELECt a.contentId AS contentId,
+         a.content_title AS contentTitle,
+         b.org_name AS orgName,
+         a.creat_user AS creatUser,
+         SUBSTR(a.creat_date,1,10) AS creatDate,
+         a.summary AS summary,
+        (select b.fileId from system_file b WHERE a.imgFileUuid = b.uuid ORDER BY b.creat_date ASC LIMIT 1) AS fileId
+         FROM
+         tb_content_manage a
+         LEFT JOIN sys_org b ON a.orgId = b.orgId
+         <where>
+         a.delete_flag = '0' and a.is_release='0' and  a.belong_contentType in
+         <foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+	           #{id}
+	     </foreach>
+        </where>
+        ORDER BY creat_date DESC LIMIT 6
+       </select>
+       
+       <!--通过职工文化分类ID获取文章 -->
+       <select id="getListByCulturePage" parameterType="map" resultType="com.bluebird.module.admin.model.GhContentManage">
+        SELECt a.contentId AS contentId,
+         a.content_title AS contentTitle,
+         b.org_name AS orgName,
+         a.creat_user AS creatUser,
+         SUBSTR(a.creat_date,1,10) AS creatDate,
+         a.summary AS summary,
+        (select b.fileId from system_file b WHERE a.imgFileUuid = b.uuid LIMIT 1) AS fileId
+         FROM
+         tb_content_manage a
+         LEFT JOIN sys_org b ON a.orgId = b.orgId
+         <where>
+         a.delete_flag = '0' and a.is_release='0'  
+         <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentTypeId)">
+             and  a.belong_contentType=#{contentTypeId}
+         </if>
+        </where>
+        ORDER BY creat_date DESC 
+       </select>
+       
+       <!--分类ID获取文章 -->
+       <select id="getListGhContentManageAll" parameterType="map" resultType="com.bluebird.module.admin.model.GhContentManage">
+        SELECt a.contentId AS contentId,
+         a.content_title AS contentTitle,
+         b.org_name AS orgName,
+         a.creat_user AS creatUser,
+         SUBSTR(a.creat_date,1,10) AS creatDate,
+         a.summary AS summary,
+        (select b.fileId from system_file b WHERE a.imgFileUuid = b.uuid LIMIT 1) AS fileId
+         FROM
+         tb_content_manage a
+         LEFT JOIN sys_org b ON a.orgId = b.orgId
+         <where>
+         a.delete_flag = '0' and a.is_release='0' and  a.belong_contentType in
+         <foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+	           #{id}
+	     </foreach>
+        </where>
+        ORDER BY creat_date DESC 
+       </select>
+       
+       <!--分类ID获取文章总数-->
+       <select id="getCountGhContentManageAll" parameterType="map" resultType="java.lang.Integer">
+        SELECt count(1)
+         FROM
+         tb_content_manage a
+         LEFT JOIN sys_org b ON a.orgId = b.orgId
+         <where>
+         a.delete_flag = '0' and a.is_release='0' and  a.belong_contentType in
+         <foreach collection="array" item="id" index="index" open="(" close=")" separator=",">
+	           #{id}
+	     </foreach>
+        </where>
+        ORDER BY creat_date DESC 
+       </select>
+       
+        <select id="getCountByCulturePage" parameterType="map" resultType="java.lang.Integer">
+        SELECt count(1)
+         FROM
+         tb_content_manage a
+         LEFT JOIN sys_org b ON a.orgId = b.orgId
+         <where>
+         a.delete_flag = '0' and a.is_release='0'  
+         <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentTypeId)">
+             and  a.belong_contentType=#{contentTypeId}
+         </if>
+        </where>
+        ORDER BY creat_date DESC 
+       </select>
+       
+       <select id="getGhContentTypeList" parameterType="map" resultType="com.bluebird.module.admin.model.GhContentType">
+        SELECT
+           a.contentTypeId AS contentTypeId,
+           a.contentType_name AS contentTypeName,
+           a.content_type AS contentType,
+           c.menu_Name AS menuName,
+           a.contentType_menuId AS menuId
+         FROM
+           tb_content_type a
+	  	   LEFT JOIN  tb_menu c ON a.contentType_menuId = c.menuId
+        <where>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentTypeId)">
+                 a.contentTypeId = #{contentTypeId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+                AND a.contentType_menuId = #{menuId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentType)">
+                AND a.content_type != #{contentType}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(belongWechartBanner)">
+                AND a.belong_wechart_banner = #{belongWechartBanner}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(showFlagWechart)">
+                AND a.show_flag_wechart = #{showFlagWechart}
+             </if>
+              AND a.delete_flag = '0'
+        </where>
+            order by a.contentType_creatDate DESC
+      </select>
+      
+      <!-- 资料下载 -->
+      <select id="getListTbFileDownload" parameterType="map" resultType="com.bluebird.module.admin.model.TbDataDownload">
+        SELECt a.fileId AS fileId,
+               a.file_name AS fileName,
+               SUBSTR(a.creat_date,1,10) AS creatDate
+         FROM
+         tb_file_download a
+         <where>
+         a.delete_flag = '0' 
+         <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+             and  a.menuId=#{menuId}
+         </if>
+        </where>
+        ORDER BY creat_date DESC 
+       </select>
+       <!-- 资料下载 -->
+      <select id="getCountTbFileDownload" parameterType="map" resultType="java.lang.Integer">
+        SELECt count(1)
+         FROM
+         tb_file_download a
+         <where>
+         a.delete_flag = '0' 
+         <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+             and  a.menuId=#{menuId}
+         </if>
+        </where>
+       </select>
+       
+       <!-- 政策法规 -->
+      <select id="getListTbPolicies" parameterType="map" resultType="com.bluebird.module.admin.model.TbPolicies">
+        SELECt a.policiesId AS policiesId,
+               a.policies_name AS policiesName,
+                SUBSTR(a.creat_date,1,10) AS creatDate
+         FROM
+         tb_policies a
+         <where>
+         a.delete_flag = '0' 
+         <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+             and  a.menuId=#{menuId}
+         </if>
+        </where>
+        ORDER BY creat_date DESC 
+       </select>
+        <!-- 政策法规 -->
+      <select id="getCountTbPolicies" parameterType="map" resultType="java.lang.Integer">
+        SELECt count(1)
+         FROM
+         tb_policies a
+         <where>
+         a.delete_flag = '0' 
+         <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+             and  a.menuId=#{menuId}
+         </if>
+        </where>
+       </select>
+       
+         <!-- 查询文章列表 -->  
+     <select id="getListGhContentManage" parameterType="map" resultType="com.bluebird.module.admin.model.GhContentManage">
+        SELECT
+           a.contentId AS contentId,
+           a.content_title AS contentTitle,
+           SUBSTR(a.creat_date,1,10) AS creatDate,
+           b.contentType_menuId as menuId
+         FROM
+           tb_content_manage a 
+           LEFT JOIN tb_content_type b ON b.contentTypeId=a.belong_contentType
+        <where>
+        	a.delete_flag = '0' and a.is_release = "0"
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentId)">
+                 AND a.contentId = #{contentId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentTitle)">
+                AND a.content_title LIKE "%"#{contentTitle}"%"
+             </if>
+        </where>
+            order by a.creat_date  DESC
+      </select>
+       <select id="getCountGhContentManage" parameterType="map" resultType="java.lang.Integer">
+        SELECT
+         count(1)
+         FROM
+           tb_content_manage a 
+        <where>
+        	a.delete_flag = '0' and a.is_release = "0"
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentId)">
+                 AND a.contentId = #{contentId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentTitle)">
+                AND a.content_title LIKE "%"#{contentTitle}"%"
+             </if>
+        </where>
+            order by a.creat_date  DESC
+      </select>
+</mapper>

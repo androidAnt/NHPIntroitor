@@ -1,0 +1,33 @@
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.main {
+	height:450px;
+	text-align: center;
+	font-size: 13px;
+}
+
+.time-axis {
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+
+.dateT{
+	margin-top: -563px;
+    margin-left: 165px;
+    color:#4ba5d5;
+}
+
+.user{
+	margin-left: 110px;
+}
+
+.dateB{
+	margin-top: 47px;
+    margin-left: 165px;
+    color:#4ba5d5;
+	
+}

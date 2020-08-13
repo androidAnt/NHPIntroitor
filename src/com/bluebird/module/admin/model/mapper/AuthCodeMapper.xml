@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.AuthCodeServiceImpl">
+    <!--  保存广告位置 -->
+    <insert id="saveSelective" parameterType="com.bluebird.module.admin.model.AuthCode">
+        insert into tb_config_code
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(code)">code,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mobile)">mobile,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createDate)">create_date,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(code)">#{code},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mobile)">#{mobile},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createDate)">#{createDate},</if>
+        </trim>
+    </insert>
+   <!-- 查询单个信息 -->
+    <select id="getByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.AuthCode">
+			 SELECT
+			 code,
+			 mobile,
+			 create_date AS createDate
+			 from
+			 tb_config_code
+			 where mobile=#{mobile}
+    </select>
+    <!-- 查询列表 -->
+    <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.AuthCode">
+		    SELECT
+			 code,
+			 mobile,
+			 create_date AS createDate
+			 from 
+			 tb_config_code 
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(code)">
+                AND code = #{code}
+            </if>
+               <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mobile)">
+                AND mobile = #{mobile}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createDate)">
+                AND a.create_date = #{createDate}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(startDate)">
+                AND a.start_date = #{startDate}
+            </if>
+           <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(endDate)">
+                AND a.end_date = #{endDate}
+            </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(reservationNo)">
+                AND a.reservation_no = #{reservationNo}
+            </if>
+               AND a.delete_flag = '0'
+        </where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(sort)">
+            ORDER BY ${sort}
+        </if>
+        order by create_date DESC
+    </select>
+    
+     <!-- 删除 --> 
+	<delete id="delete" parameterType="String">
+		delete from
+		tb_config_code
+		where
+		mobile =#{mobile}
+	</delete>
+	<!-- 根据手机号码查询单个 -->
+	 <select id="getAuthCode" parameterType="map" resultType="com.bluebird.module.admin.model.AuthCode">
+			 SELECT
+			 code,
+			 mobile,
+			 create_date AS createDate
+			 from
+			 tb_config_code 
+			 where mobile=#{mobile}
+    </select>
+</mapper>

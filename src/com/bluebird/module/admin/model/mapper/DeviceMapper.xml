@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.DeviceServiceImpl">
+   <!-- 添加设备检验信息 -->
+     <insert id="saveSelective" parameterType="com.bluebird.module.admin.model.Device">
+        insert into tb_device
+        <!-- 分割 -->
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deviceId)">deviceId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">delete_flag,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createUser)">create_user,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createDate)">create_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceName)">g_device_name,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyId)">make_company_id,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(useCompanyId)">use_company_id,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceNo)">g_deviceNo,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceType)">g_device_type,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceModel)">g_device_model,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceCode)">g_device_code,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceClass)">g_device_class,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceLocation)">g_device_location,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gSiteType)">g_site_type,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gUseCard)">g_use_card,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gRegisterCode)">g_register_code,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gInstalCompany)">g_instal_company,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDesignCompany)">g_design_company,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gMakeDate)">g_make_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gUseDate)">g_use_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gRealUseYears)">g_real_use_years,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gFactoryNumber)">g_factory_number,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gLongitude)">g_longitude,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gLatitude)">g_latitude,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gQualityLevel)">g_quality_level,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gInspectionDate)">g_inspection_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gFocus)">g_focus,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gFocusCause)">g_focus_cause,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gHigh)">g_high,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gLasting)">g_lasting,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gMainStructure)">g_main_structure,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDesignUseYears)">g_design_use_years,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gInstalShape)">g_instal_shape,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gVolume)">g_volume,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gSupportStyle)">g_support_style,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gUsePressure)">g_use_pressure,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gNorm)">g_norm,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gUseTemper)">g_use_temper,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gVolumeDiameter)">g_volume_diameter,</if>
+            <!-- 锅炉 -->
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tBoilerLocation)">t_boiler_location,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tNominalOut)">t_nominal_out,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tNominalPressure)">t_nominal_pressure,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tBoilerUse)">t_boiler_use,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tFuelType)">t_fuel_type,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tOutTemperature)">t_out_temperature,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tBoilerMedium)">t_boiler_medium,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tWaterTreatment)">t_water_treatment,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tSimplified)">t_simplified,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(ratedTemperature)">rated_temperature,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(reflowTemperature)">reflow_temperature,</if>
+            <!-- 压力容器 -->
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerStructure)">container_structure,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(safeLevel)">safe_level,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerNo)">container_no,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(maxCharge)">max_charge,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(thermalInsulation)">thermal_insulation,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pressureLevel)">pressure_level,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerType)">container_type,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerClass)">container_class,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeSpecification)">make_specification,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerDrawingNo)">container_drawing_no,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(designSpecification)">design_specification,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(designDate)">design_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(designPressure)">design_pressure,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(designTemperature)">design_temperature,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(safeModel)">safe_model,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(nominalHead)">nominal_head,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(nominalBarrel)">nominal_barrel,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(corrosionHead)">corrosion_head,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(corrosionBarrel)">corrosion_barrel,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(materialHead)">material_head,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(materialBarrel)">material_barrel,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(ruptureType)">rupture_type,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(ruptureSpecification)">rupture_specification,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(ruptureNumber)">rupture_number,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(liquid)">liquid,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pressureRange)">pressure_range</if> 
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deviceId)">#{deviceId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">#{deleteFlag},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createUser)">#{createUser},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createDate)">#{createDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceName)">#{gDeviceName},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyId)">#{makeCompanyId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(useCompanyId)">#{useCompanyId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceNo)">#{gDeviceNo},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceType)">#{gDeviceType},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceModel)">#{gDeviceModel},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceCode)">#{gDeviceCode},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceClass)">#{gDeviceClass},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceLocation)">#{gDeviceLocation},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gSiteType)">#{gSiteType},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gUseCard)">#{gUseCard},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gRegisterCode)">#{gRegisterCode},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gInstalCompany)">#{gInstalCompany},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDesignCompany)">#{gDesignCompany},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gMakeDate)">#{gMakeDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gUseDate)">#{gUseDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gRealUseYears)">#{gRealUseYears},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gFactoryNumber)">#{gFactoryNumber},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gLongitude)">#{gLongitude},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gLatitude)">#{gLatitude},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gQualityLevel)">#{gQualityLevel},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gInspectionDate)">#{gInspectionDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gFocus)">#{gFocus},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gFocusCause)">#{gFocusCause},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gHigh)">#{gHigh},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gLasting)">#{gLasting},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gMainStructure)">#{gMainStructure},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDesignUseYears)">#{gDesignUseYears},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gInstalShape)">#{gInstalShape},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gVolume)">#{gVolume},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gSupportStyle)">#{gSupportStyle},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gUsePressure)">#{gUsePressure},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gNorm)">#{gNorm},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gUseTemper)">#{gUseTemper},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gVolumeDiameter)">#{gVolumeDiameter},</if>
+            <!-- 锅炉 -->
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tBoilerLocation)">#{tBoilerLocation},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tNominalOut)">#{tNominalOut},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tNominalPressure)">#{tNominalPressure},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tBoilerUse)">#{tBoilerUse},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tFuelType)">#{tFuelType},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tOutTemperature)">#{tOutTemperature},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tBoilerMedium)">#{tBoilerMedium},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tWaterTreatment)">#{tWaterTreatment},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tSimplified)">#{tSimplified},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(ratedTemperature)">#{ratedTemperature},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(reflowTemperature)">#{reflowTemperature},</if>
+            <!-- 压力容器 -->
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerStructure)">#{containerStructure},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(safeLevel)">#{safeLevel},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerNo)">#{containerNo},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(maxCharge)">#{maxCharge},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(thermalInsulation)">#{thermalInsulation},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pressureLevel)">#{pressureLevel},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerType)">#{containerType},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerClass)">#{containerClass},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeSpecification)">#{makeSpecification},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerDrawingNo)">#{containerDrawingNo},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(designSpecification)">#{designSpecification},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(designDate)">#{designDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(designPressure)">#{designPressure},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(designTemperature)">#{designTemperature},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(safeModel)">#{safeModel},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(nominalHead)">#{nominalHead},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(nominalBarrel)">#{nominalBarrel},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(corrosionHead)">#{corrosionHead},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(corrosionBarrel)">#{corrosionBarrel},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(materialHead)">#{materialHead},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(materialBarrel)">#{materialBarrel},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(ruptureType)">#{ruptureType},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(ruptureSpecification)">#{ruptureSpecification},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(ruptureNumber)">#{ruptureNumber},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(liquid)">#{liquid},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pressureRange)">#{pressureRange}</if> 
+        </trim>
+    </insert>
+   
+     <!-- 查看单个检验设备信息 -->
+      <select id="getByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.Device">
+         SELECT
+           a.deviceId AS deviceId,
+           a.delete_flag AS deleteFlag,
+           a.create_user AS createUser,
+           a.create_date AS createDate,
+           a.g_device_name AS gDeviceName,
+           a.g_deviceNo AS gDeviceNo,
+           a.g_device_type AS gDeviceType,
+           a.g_device_model AS gDeviceModel,
+           a.g_device_code AS gDeviceCode,
+           a.g_device_class AS gDeviceClass,
+           a.g_device_location AS gDeviceLocation,
+           a.g_site_type AS gSiteType,
+           a.g_use_card AS gUseCard,
+           a.g_register_code AS gRegisterCode,
+           a.g_instal_company AS gInstalCompany,
+           a.g_design_company AS gDesignCompany,
+           DATE_FORMAT(a.g_make_date,'%Y-%m-%d') AS gMakeDate,
+           DATE_FORMAT(a.g_use_date,'%Y-%m-%d') AS gUseDate,
+           a.g_real_use_years AS gRealUseYears,
+           a.g_factory_number AS gFactoryNumber,
+           a.g_longitude AS gLongitude,
+           a.g_latitude AS gLatitude,
+           a.g_quality_level AS gQualityLevel,
+           DATE_FORMAT(a.g_inspection_date,'%Y-%m-%d') AS gInspectionDate,
+           a.g_focus AS gFocus,
+           a.g_focus_cause AS gFocusCause,
+           a.g_high AS gHigh,
+           a.g_lasting AS gLasting,
+           a.g_main_structure AS gMainStructure,
+           a.g_design_use_years AS gDesignUseYears,
+           a.g_instal_shape AS gInstalShape,
+           a.g_volume AS gVolume,
+           a.g_support_style AS gSupportStyle,
+           a.g_use_pressure AS gUsePressure,
+           a.g_norm AS gNorm,
+           a.g_use_temper AS gUseTemper,
+           a.g_volume_diameter AS gVolumeDiameter,
+           a.t_boiler_location AS tBoilerLocation,
+           a.t_nominal_out AS tNominalOut,
+           a.t_nominal_pressure AS tNominalPressure,
+           a.t_boiler_use AS tBoilerUse,
+           a.t_fuel_type AS tFuelType,
+           a.t_out_temperature AS tOutTemperature,
+           a.t_boiler_medium AS tBoilerMedium,
+           a.t_water_treatment AS tWaterTreatment,
+           a.t_simplified AS tSimplified,
+           a.rated_temperature as ratedTemperature,
+           a.reflow_temperature as reflowTemperature,
+           a.container_structure AS containerStructure,
+           a.safe_level AS safeLevel,
+           a.container_no AS containerNo,
+           a.max_charge AS maxCharge,
+           a.thermal_insulation AS thermalInsulation,
+           a.pressure_level AS pressureLevel,
+           a.container_type AS containerType,
+           a.container_class AS containerClass,
+           a.make_specification AS makeSpecification,
+           a.container_drawing_no AS containerDrawingNo,
+           a.design_specification AS designSpecification,
+           a.design_date AS designDate,
+           a.design_pressure AS designPressure,
+           a.design_temperature AS designTemperature,
+           a.safe_model AS safeModel,
+           a.nominal_head AS nominalHead,
+           a.nominal_barrel AS nominalBarrel,
+           a.corrosion_head AS corrosionHead,
+           a.corrosion_barrel AS corrosionBarrel,
+           a.material_head AS materialHead,
+           a.material_barrel AS materialBarrel,
+           a.rupture_type AS ruptureType,
+           a.rupture_specification AS ruptureSpecification,
+           a.rupture_number AS ruptureNumber,
+           a.liquid AS liquid,
+           a.pressure_range AS pressureRange,
+           a.remind_state AS remindState
+         FROM
+           tb_device a
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deviceId)">
+                a.deviceId=#{deviceId}
+            </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceNo)">
+               AND a.g_deviceNo=#{gDeviceNo}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceName)">
+                AND a.g_device_name LIKE "%"#{gDeviceName}"%"
+            </if>
+                AND a.delete_flag = '0'
+        </where>
+      </select>  
+        
+      <!-- 查询检验设备列表 -->  
+     <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.Device">
+        SELECT
+           a.deviceId AS deviceId,
+           a.delete_flag AS deleteFlag,
+           a.create_user AS createUser,
+           a.create_date AS createDate,
+           a.g_device_name AS gDeviceName,
+           a.make_company_id AS makeCompanyId,
+           a.use_company_id AS useCompanyId,
+           a.g_deviceNo AS gDeviceNo,
+           a.g_device_type AS gDeviceType,
+           a.g_device_model AS gDeviceModel,
+           a.g_device_code AS gDeviceCode,
+           a.g_device_class AS gDeviceClass,
+           a.g_device_location AS gDeviceLocation,
+           a.g_site_type AS gSiteType,
+           a.g_use_card AS gUseCard,
+           a.g_register_code AS gRegisterCode,
+           a.g_instal_company AS gInstalCompany,
+           a.g_design_company AS gDesignCompany,
+           a.g_make_date AS gMakeDate,
+           a.g_use_date AS gUseDate,
+           a.g_real_use_years AS gRealUseYears,
+           a.g_factory_number AS gFactoryNumber,
+           a.g_longitude AS gLongitude,
+           a.g_latitude AS gLatitude,
+           a.g_quality_level AS gQualityLevel,
+           a.g_inspection_date AS gInspectionDate,
+           a.g_focus AS gFocus,
+           a.g_focus_cause AS gFocusCause,
+           a.g_high AS gHigh,
+           a.g_lasting AS gLasting,
+           a.g_main_structure AS gMainStructure,
+           a.g_design_use_years AS gDesignUseYears,
+           a.g_instal_shape AS gInstalShape,
+           a.g_volume AS gVolume,
+           a.g_support_style AS gSupportStyle,
+           a.g_use_pressure AS gUsePressure,
+           a.g_norm AS gNorm,
+           a.g_use_temper AS gUseTemper,
+           a.g_volume_diameter AS gVolumeDiameter,
+           a.t_boiler_location AS tBoilerLocation,
+           a.t_nominal_out AS tNominalOut,
+           a.t_nominal_pressure AS tNominalPressure,
+           a.t_boiler_use AS tBoilerUse,
+           a.t_fuel_type AS tFuelType,
+           a.t_out_temperature AS tOutTemperature,
+           a.t_boiler_medium AS tBoilerMedium,
+           a.t_water_treatment AS tWaterTreatment,
+           a.t_simplified AS tSimplified,
+           a.rated_temperature as ratedTemperature,
+           a.reflow_temperature as reflowTemperature,
+           a.container_structure AS containerStructure,
+           a.safe_level AS safeLevel,
+           a.container_no AS containerNo,
+           a.max_charge AS maxCharge,
+           a.thermal_insulation AS thermalInsulation,
+           a.pressure_level AS pressureLevel,
+           a.container_type AS containerType,
+           a.container_class AS containerClass,
+           a.make_specification AS makeSpecification,
+           a.container_drawing_no AS containerDrawingNo,
+           a.design_specification AS designSpecification,
+           a.design_date AS designDate,
+           a.design_pressure AS designPressure,
+           a.design_temperature AS designTemperature,
+           a.safe_model AS safeModel,
+           a.nominal_head AS nominalHead,
+           a.nominal_barrel AS nominalBarrel,
+           a.corrosion_head AS corrosionHead,
+           a.corrosion_barrel AS corrosionBarrel,
+           a.material_head AS materialHead,
+           a.material_barrel AS materialBarrel,
+           a.rupture_type AS ruptureType,
+           a.rupture_specification AS ruptureSpecification,
+           a.rupture_number AS ruptureNumber,
+           a.liquid AS liquid,
+           a.pressure_range AS pressureRange,
+           a.remind_state AS remindState
+         FROM
+           tb_device a
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deviceId)">
+                 a.deviceId=#{deviceId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceNo)">
+                AND a.g_deviceNo=#{gDeviceNo}
+            </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceName)">
+                AND a.g_device_name LIKE "%"#{gDeviceName}"%"
+            </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(companyName)">
+                AND b.company_name LIKE "%"#{companyName}"%"
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceType)">
+                AND a.g_device_type LIKE "%"#{gDeviceType}"%"
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gQualityLevel)">
+                AND a.g_quality_level=#{gQualityLevel}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyId)">
+                AND a.make_company_id=#{makeCompanyId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(useCompanyId)">
+                AND a.use_company_id=#{useCompanyId}
+            </if>
+              <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(flag)">
+               AND  DATE_sub(a.g_inspection_date, INTERVAL 10 DAY) &lt;=NOW()  
+            </if>
+              <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(flag)">
+               AND  a.remind_state is null
+            </if>
+            
+              AND a.delete_flag = '0'
+        </where>
+            order by a.create_date DESC
+      </select>
+        
+      <!-- 查看待检设备总数 -->  
+       <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+          SELECT count(deviceId)
+          FROM tb_device
+         <where>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deviceId)">
+                 deviceId=#{deviceId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceNo)">
+                AND g_deviceNo=#{gDeviceNo}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceType)">
+                 AND g_device_type LIKE "%" #{gDeviceType}"%"
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceClass)">
+                AND g_device_class LIKE "%"#{gDeviceClass}"%"
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceLocation)">
+                AND g_device_location LIKE "%"#{gDeviceLocation}"%"
+            </if>
+              <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(flag)">
+               AND  DATE_sub(g_inspection_date, INTERVAL 10 DAY) &lt;=NOW() 
+            </if>
+              <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(flag)">
+               AND  remind_state is null
+            </if>
+              AND delete_flag = '0'
+         </where>
+       </select>
+      <!-- 修改检验设备信息 -->
+       <update id="updateSelective" parameterType="com.bluebird.module.admin.model.Device">
+         UPDATE tb_device
+         <set>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deviceId)">
+               deviceId=#{deviceId},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceName)">
+               g_device_name=#{gDeviceName},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(makeCompanyId)">
+               make_company_id=#{makeCompanyId},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(useCompanyId)">
+               use_company_id=#{useCompanyId},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceNo)">
+               g_deviceNo=#{gDeviceNo},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceType)">
+               g_device_type=#{gDeviceType},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceModel)">
+               g_device_model=#{gDeviceModel},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceCode)">
+               g_device_code=#{gDeviceCode},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceClass)">
+               g_device_class=#{gDeviceClass},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDeviceLocation)">
+               g_device_location=#{gDeviceLocation},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gSiteType)">
+               g_site_type=#{gSiteType},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gUseCard)">
+               g_use_card=#{gUseCard},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gRegisterCode)">
+               g_register_code=#{gRegisterCode},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gInstalCompany)">
+               g_instal_company=#{gInstalCompany},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gDesignCompany)">
+               g_design_company=#{gDesignCompany},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gMakeDate)">
+               g_make_date=#{gMakeDate},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gUseDate)">
+               g_use_date=#{gUseDate},
+            </if>
+               g_real_use_years=#{gRealUseYears},
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gFactoryNumber)">
+               g_factory_number=#{gFactoryNumber},
+            </if>
+               g_longitude=#{gLongitude},
+               g_latitude=#{gLatitude},
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gQualityLevel)">
+               g_quality_level=#{gQualityLevel},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gInspectionDate)">
+               g_inspection_date=#{gInspectionDate},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gFocus)">
+               g_focus=#{gFocus},
+            </if>
+               g_focus_cause=#{gFocusCause},
+               g_high=#{gHigh},
+               g_lasting=#{gLasting},
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gMainStructure)">
+               g_main_structure=#{gMainStructure},
+            </if>
+               g_design_use_years=#{gDesignUseYears},
+               g_instal_shape=#{gInstalShape},
+               g_volume=#{gVolume},
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gSupportStyle)">
+               g_support_style=#{gSupportStyle},
+            </if>
+               g_use_pressure=#{gUsePressure},
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(gNorm)">
+               g_norm=#{gNorm},
+            </if>
+               g_use_temper=#{gUseTemper},
+               g_volume_diameter=#{gVolumeDiameter},
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tBoilerLocation)">
+               t_boiler_location=#{tBoilerLocation},
+            </if>
+               t_nominal_out=#{tNominalOut},
+               t_nominal_pressure=#{tNominalPressure},
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tBoilerUse)">
+               t_boiler_use=#{tBoilerUse},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tFuelType)">
+               t_fuel_type=#{tFuelType},
+            </if>
+               t_out_temperature=#{tOutTemperature},
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(tBoilerMedium)">
+               t_boiler_medium=#{tBoilerMedium},
+            </if>
+               t_water_treatment=#{tWaterTreatment},
+               t_simplified=#{tSimplified},
+               rated_temperature=#{ratedTemperature},
+               reflow_temperature=#{reflowTemperature},
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerStructure)">
+               container_structure=#{containerStructure},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(safeLevel)">
+               safe_level=#{safeLevel},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerNo)">
+               container_no=#{containerNo},
+            </if>
+               max_charge=#{maxCharge},
+               thermal_insulation=#{thermalInsulation},
+               pressure_level=#{pressureLevel},
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerType)">
+               container_type=#{containerType},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerClass)">
+               container_class=#{containerClass},
+            </if>
+               make_specification=#{makeSpecification},
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(containerDrawingNo)">
+               container_drawing_no=#{containerDrawingNo},
+            </if>
+               design_specification=#{designSpecification},
+               design_date=#{designDate},
+               design_pressure=#{designPressure},
+               design_temperature=#{designTemperature},
+               safe_model=#{safeModel},
+               nominal_head=#{nominalHead},
+               nominal_barrel=#{nominalBarrel},
+               corrosion_head=#{corrosionHead},
+               corrosion_barrel=#{corrosionBarrel},
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(materialHead)">
+               material_head=#{materialHead},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(materialBarrel)">
+               material_barrel=#{materialBarrel},
+            </if>
+               rupture_type=#{ruptureType},
+               rupture_specification=#{ruptureSpecification},
+               rupture_number=#{ruptureNumber},
+               liquid=#{liquid},
+               pressure_range=#{pressureRange},
+               remind_state=#{remindState}
+         </set>
+               WHERE  deviceId=#{deviceId}
+       </update>
+      <!-- 删除检验设备信息 -->
+       <update id="delete" parameterType="String">
+         update tb_device
+         <set>
+			delete_flag = '1' 
+		 </set>
+		 <where>
+			deviceId=#{deviceId}
+		 </where>
+       </update>
+   
+</mapper>

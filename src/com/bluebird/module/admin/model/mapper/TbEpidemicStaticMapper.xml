@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.TbEpidemicStaticServiceImpl">
+     
+       <!-- 查询上报统计列表 -->  
+     <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.TbEpidemicStatic">
+        SELECT
+           a.epidemicStaticId AS epidemicStaticId,
+           a.static_date AS staticDate,
+           a.static_com_num AS staticComNum,
+           a.static_total_num AS staticTotalNum,
+           a.static_no_num AS staticNoNum,
+           a.com_rate AS comRate
+         FROM
+           tb_epidemic_static a
+        	<where>
+        	1=1
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(startTime)">
+                AND  DATE_FORMAT(a.static_date, '%Y-%m-%d') >= #{startTime}
+          </if>
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(endTime)">
+                AND #{endTime} >= DATE_FORMAT(a.static_date, '%Y-%m-%d')
+          </if>
+        </where>
+            order by a.static_date DESC 
+      </select>
+      
+     <!-- 菜单总数 -->  
+        <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+          SELECT count(epidemicStaticId)
+          FROM tb_epidemic_static
+         <where>
+        	1=1
+         <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(startTime)">
+                AND  DATE_FORMAT(static_date, '%Y-%m-%d') >= #{startTime}
+          </if>
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(endTime)">
+                AND #{endTime} >= DATE_FORMAT(static_date, '%Y-%m-%d')
+          </if>
+         </where>
+       </select>
+     
+     <!-- 查询当日是否已经上报数据 -->
+     <select id="queryReportCurr" parameterType="string" resultType="com.bluebird.module.admin.model.TbEpidemicStatic">
+		SELECT epidemicStaticId,static_date as staticDate,static_com_num as staticComNum,static_total_num as staticTotalNum,static_no_num as staticNoNum,com_rate as comRate FROM tb_epidemic_static a
+		WHERE LEFT(a.static_date, 10)=#{staticDate}
+	</select>
+     
+     
+     <!--新增疫情疫情今日上报	 -->
+       <insert id="saveSelective" parameterType="com.bluebird.module.admin.model.TbEpidemicStatic">
+        insert into tb_epidemic_static
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(epidemicStaticId)">epidemicStaticId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(staticDate)">static_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(staticComNum)">static_com_num,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(staticTotalNum)">static_total_num ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(staticNoNum)">static_no_num,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(comRate)">com_rate,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(epidemicStaticId)">#{epidemicStaticId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(staticDate)">#{staticDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(staticComNum)">#{staticComNum},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(staticTotalNum)">#{staticTotalNum} ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(staticNoNum)">#{staticNoNum},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(comRate)">#{comRate},</if>
+        </trim>
+    </insert>
+    
+    <update id="updateSelective" parameterType="com.bluebird.module.admin.model.TbEpidemicStatic">
+		UPDATE tb_epidemic_static
+		<set>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(staticComNum)">
+				static_com_num = #{staticComNum},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(staticNoNum)">
+				static_no_num = #{staticNoNum},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(comRate)">
+				com_rate = #{comRate},
+			</if>
+		</set>
+		WHERE  epidemicStaticId=#{epidemicStaticId}
+	</update>
+    
+</mapper>

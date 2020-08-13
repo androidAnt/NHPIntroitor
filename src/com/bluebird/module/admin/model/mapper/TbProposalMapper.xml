@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.TbProposalServiceImpl">
+      <!-- 查询合理化建议列表 -->  
+     <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.TbProposal">
+        SELECT
+           a.proposalId AS proposalId,
+           a.title AS title,
+           a.content AS content,
+           a.creat_user AS creatUser,
+           a.creat_date AS creatDate,
+           a.auditor_type AS auditorType,
+           o.org_name AS orgName 
+         FROM
+           tb_proposal a 
+           left join sys_org o on a.orgId=o.orgId
+        <where>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(proposalId)">
+                 a.proposalId = #{proposalId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">
+                AND a.title LIKE "%"#{title}"%"
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+                AND a.orgId = #{orgId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorType)">
+                AND a.auditor_type = #{auditorType}
+             </if>
+              AND a.delete_flag = '0'
+        </where>
+            order by a.creat_date DESC
+      </select>
+      
+     <!-- 合理化建议总数 -->  
+        <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+          SELECT count(proposalId)
+          FROM tb_proposal a
+        <where>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(proposalId)">
+                 a.proposalId = #{proposalId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">
+                AND a.title LIKE "%"#{title}"%"
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+                AND a.orgId = #{orgId}
+             </if>
+              <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorType)">
+                AND a.auditor_type = #{auditorType}
+             </if>
+              AND a.delete_flag = '0'
+        </where>
+       </select>
+       
+       <!--新增合理化建议	 -->
+       <insert id="saveSelective" parameterType="com.bluebird.module.admin.model.TbProposal">
+        insert into tb_proposal
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(proposalId)">proposalId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">title,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(content)">content,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">delete_flag ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">orgId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">creat_user,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">creat_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierUser)">replier_user,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierDate)">replier_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierType)">replier_type,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierContent)">replier_content,</if>
+     
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(proposalId)">#{proposalId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">#{title},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(content)">#{content},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">#{deleteFlag} ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">#{orgId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">#{creatUser},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">#{creatDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierUser)">#{replierUser},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierDate)">#{replierDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierType)">#{replierType},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierContent)">#{replierContent},</if>
+        </trim>
+    </insert>
+    
+     <!--删除-->
+     <update id="delete" parameterType="String">
+         update tb_proposal
+         <set>
+			delete_flag = '1' 
+		 </set>
+		 <where>
+			proposalId=#{proposalId}
+		 </where>
+       </update>
+       
+     <!--查找 -->
+       <select id="getByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.TbProposal">
+         SELECT
+          a.proposalId AS proposalId,
+           a.title AS title,
+           a.content AS content,
+           a.orgId AS orgId,
+           a.creat_user AS creatUser,
+           a.creat_date AS creatDate,
+           a.auditor_content AS auditorContent,
+           a.auditor_type AS auditorType,
+           
+           a.auditor_date AS auditorDate,
+           a.auditor_user AS auditorUser,
+           a.replier_user AS replierUser,
+           a.replier_date AS replierDate,
+           a.replier_type AS replierType,
+           a.replier_content AS replierContent
+           
+         FROM
+           tb_proposal a
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(proposalId)">
+                a.proposalId=#{proposalId}
+            </if>
+                AND a.delete_flag = '0'
+        </where>
+      </select>  
+       
+     <!--修改 -->
+       <update id="updateSelective" parameterType="com.bluebird.module.admin.model.TbProposal">
+         UPDATE tb_proposal	
+         <set>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">
+               title=#{title},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(content)">
+               content=#{content},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierUser)">
+               replier_user=#{replierUser},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierDate)">
+               replier_date=#{replierDate},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierType)">
+               replier_type=#{replierType},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierContent)">
+               replier_content=#{replierContent},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorUser)">
+               auditor_user=#{auditorUser},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorDate)">
+               auditor_date=#{auditorDate},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorType)">
+               auditor_type=#{auditorType},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorContent)">
+               auditor_content=#{auditorContent},
+            </if>
+         </set>
+               WHERE  proposalId=#{proposalId}
+       </update>
+</mapper>

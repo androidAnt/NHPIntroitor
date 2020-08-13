@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.GhMenuManageServiceImpl">
+      <!-- 查询菜单列表 -->  
+     <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.GhMenuManage">
+        SELECT
+           a.menuId AS menuId,
+           a.menu_Name AS menuName,
+           a.menu_sort AS menuSort,
+           a.menu_status AS menuStatus,
+           a.create_date AS createDate,
+           a.create_user AS createUser,
+           a.imgUuid AS imgUuid
+         FROM
+           tb_menu a
+        <where>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuName)">
+                AND a.menu_Name LIKE "%"#{menuName}"%"
+             </if>
+              AND a.menu_status = '0'
+        </where>
+            order by a.menu_sort ASC
+      </select>
+      
+     <!-- 菜单总数 -->  
+        <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+          SELECT count(menuId)
+          FROM tb_menu
+         <where>
+ 			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuName)">
+                AND menu_Name LIKE "%"#{menuName}"%"
+             </if>
+              AND menu_status = '0'
+         </where>
+       </select>
+
+<!--   	查找所有菜单   -->
+       <select id="getAllMenu" parameterType="map" resultType="com.bluebird.module.admin.model.GhMenuManage">
+		SELECT menuId,menu_Name AS menuName FROM tb_menu WHERE menu_status = '0' order by menu_sort ASC	
+	</select>
+	
+	    <select id="getByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.GhMenuManage">
+        SELECT menuId,menu_Name AS menuName FROM tb_menu a
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+                AND a.menuId = #{menuId}
+            </if>
+        </where>
+    </select>
+    
+    <update id="updateSelective" parameterType="com.bluebird.module.admin.model.GhMenuManage">
+         UPDATE tb_menu
+         <set>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+               menuId=#{menuId},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuName)">
+               menu_Name=#{menuName},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuSort)">
+               menu_sort=#{menuSort},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuStatus)">
+               menu_status=#{menuStatus},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(imgUuid)">
+               imgUuid=#{imgUuid},
+            </if>
+         </set>
+               WHERE  menuId=#{menuId}
+       </update>
+       
+       <select id="getById" parameterType="String" resultType="com.bluebird.module.admin.model.GhMenuManage">
+        SELECT menuId,menu_Name AS menuName,menu_sort AS menuSort,menu_status AS menuStatus
+        ,create_date AS createDate ,create_user AS createUser, imgUuid  FROM tb_menu a WHERE  a.menuId =#{menuId}
+    </select>
+       
+</mapper>

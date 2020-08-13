@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.TbPoliciesServiceImpl">
+      <!-- 查询政策法规列表 -->  
+     <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.TbPolicies">
+        SELECT
+           a.policiesId AS policiesId,
+           a.policies_name AS policiesName,
+           a.policies_content AS policiesContent,
+           a.menuId AS menuId,
+           a.delete_flag AS deleteFlag,
+           a.orgId AS orgId,
+           a.creat_user AS creatUser,
+           a.creat_date AS creatDate,
+           a.policies_type AS policiesType,
+           s.dic_name AS policiesTypeName,
+           b.menu_Name AS menuName,
+           o.org_name AS orgName 
+         FROM
+           tb_policies a 
+           left join tb_menu b on a.menuId=b.menuId 
+           left join sys_org o on a.orgId=o.orgId
+           left join sys_dic s on s.dic_code=a.policies_type
+           LEFT JOIN sys_dic c ON s.dic_type=c.dicId
+           
+        <where>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesId)">
+                 a.policiesId = #{policiesId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesName)">
+                AND a.policies_name LIKE "%"#{policiesName}"%"
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+                AND a.menuId = #{menuId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+                AND a.orgId = #{orgId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesType)">
+                AND a.policies_type = #{policiesType}
+             </if>
+              AND a.delete_flag = '0' AND c.dic_code='policiesType'
+        </where>
+            order by a.creat_date DESC
+      </select>
+      
+     <!-- 资料下载总数 -->  
+        <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+          SELECT count(policiesId)
+          FROM tb_policies a
+        <where>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesId)">
+                 a.policiesId = #{policiesId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesName)">
+                AND a.policies_name LIKE "%"#{policiesName}"%"
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+                AND a.menuId = #{menuId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+                AND a.orgId = #{orgId}
+             </if>
+              AND a.delete_flag = '0'
+        </where>
+       </select>
+       
+       <!--新增资料下载 -->
+       <insert id="saveSelective" parameterType="com.bluebird.module.admin.model.TbPolicies">
+        insert into tb_policies
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesId)">policiesId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesName)">policies_name,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesContent)">policies_content,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">menuId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">delete_flag ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">orgId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">creat_user,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">creat_date,</if>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileUuid)">fileUuid,</if>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesType)">policies_type,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesId)">#{policiesId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesName)">#{policiesName},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesContent)">#{policiesContent},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">#{menuId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">#{deleteFlag} ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">#{orgId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">#{creatUser},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">#{creatDate},</if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileUuid)">#{fileUuid},</if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesType)">#{policiesType},</if>
+        </trim>
+    </insert>
+    
+     <!--删除资料下载 -->
+     <update id="delete" parameterType="String">
+         update tb_policies
+         <set>
+			delete_flag = '1' 
+		 </set>
+		 <where>
+			policiesId=#{policiesId}
+		 </where>
+       </update>
+       
+     <!--查找指定资料 -->
+       <select id="getByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.TbPolicies">
+         SELECT
+          a.policiesId AS policiesId,
+           a.policies_name AS policiesName,
+           a.policies_content AS policiesContent,
+           a.menuId AS menuId,
+           a.delete_flag AS deleteFlag,
+           a.orgId AS orgId,
+           a.creat_user AS creatUser,
+           a.creat_date AS creatDate,
+           a.policies_type AS policiesType,
+           a.fileUuid AS fileUuid
+           
+         FROM
+           tb_policies a
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesId)">
+                a.policiesId=#{policiesId}
+            </if>
+                AND a.delete_flag = '0'
+        </where>
+      </select>  
+       
+     <!--修改内容分类 -->
+       <update id="updateSelective" parameterType="com.bluebird.module.admin.model.TbPolicies">
+         UPDATE tb_policies	
+         <set>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesName)">
+               policies_name=#{policiesName},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesContent)">
+               policies_content=#{policiesContent},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+               menuId=#{menuId},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesType)">
+               policies_type=#{policiesType},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileUuid)">
+               fileUuid=#{fileUuid},
+            </if>
+         </set>
+               WHERE  policiesId=#{policiesId}
+       </update>
+       
+       <!-- 查询政策法规列表 APP-->  
+     <select id="getAppListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.TbPolicies">
+        SELECT
+           a.policiesId AS policiesId,
+           a.policies_name AS policiesName,
+           SUBSTR(a.creat_date,1,10) AS creatDate
+         FROM
+           tb_policies a 
+        <where>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+                AND a.menuId = #{menuId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesType)">
+                AND a.policies_type = #{policiesType}
+             </if>
+              AND a.delete_flag = '0'
+        </where>
+            order by a.creat_date DESC
+      </select>
+      
+        <select id="getAppCountByCondition" parameterType="map" resultType="java.lang.Integer">
+        SELECT
+          count(1)
+         FROM
+           tb_policies a 
+        <where>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+                AND a.menuId = #{menuId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(policiesType)">
+                AND a.policies_type = #{policiesType}
+             </if>
+              AND a.delete_flag = '0'
+        </where>
+            order by a.creat_date DESC
+      </select>
+</mapper>

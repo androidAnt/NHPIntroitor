@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.GhContentManageServiceImpl">
+      <!-- 查询内容分类列表 -->  
+     <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.GhContentManage">
+        SELECT
+           a.contentId AS contentId,
+           a.content_title AS contentTitle,
+           a.is_release AS isRelease,
+           a.creat_user AS creatUser,
+           a.creat_date AS creatDate,
+           a.imgFileUuid AS imgFileUuid,
+           b.contentType_name as contentTypeName,
+           b.article_type as contentArticleType,
+           c.menu_Name as menuName
+         FROM
+           tb_content_manage a 
+           LEFT JOIN tb_content_type b ON a.belong_contentType = b.contentTypeId
+	   	   LEFT JOIN tb_menu c ON c.menuId = b.contentType_menuId
+        <where>
+        	a.delete_flag = '0'
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentId)">
+                 AND a.contentId = #{contentId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentTitle)">
+                AND a.content_title LIKE "%"#{contentTitle}"%"
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(belongContentType)">
+                AND a.belong_contentType = #{belongContentType}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isRelease)">
+                AND a.is_release = #{isRelease}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(imgShow)">
+                AND a.img_show = #{imgShow}
+             </if>
+        </where>
+            order by a.creat_date  DESC
+      </select>
+      
+     <!-- 内容分类总数 -->  
+        <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+          SELECT count(contentId)
+          FROM tb_content_manage
+       <where>
+        	delete_flag = '0'
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentId)">
+                 AND contentId = #{contentId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentTitle)">
+                AND content_title LIKE "%"#{contentTitle}"%"
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(belongContentType)">
+                AND belong_contentType = #{belongContentType}
+             </if>
+        </where>
+       </select>
+       
+<!--        删除内容 -->
+     <update id="delete" parameterType="String">
+         update tb_content_manage
+         <set>
+			delete_flag = '1' 
+		 </set>
+		 <where>
+			contentId=#{contentId}
+		 </where>
+       </update>
+       
+       <!-- 撤回 -->
+       <update id="revokeContentTypeById" parameterType="String">
+         update tb_content_manage
+         <set>
+			is_release = '1' 
+		 </set>
+		 <where>
+			contentId=#{contentId}
+		 </where>
+       </update>
+       
+<!--        新增内容 -->
+        <insert id="saveSelective" parameterType="com.bluebird.module.admin.model.GhContentManage">
+        insert into tb_content_manage
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentId)">contentId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentTitle)">content_title,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentDetail)">content_detail,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">delete_flag,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(imgShow)">img_show ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentShow)">content_show,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(belongContentType)">belong_contentType,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isRelease)">is_release,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">creat_user,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">creat_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">orgId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(viewCount)">view_count,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentSource)">content_source,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentUrl)">content_url,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileUuid)">fileUuid,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(imgFileUuid)">imgFileUuid,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(summary)">summary,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentId)">#{contentId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentTitle)">#{contentTitle},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentDetail)">#{contentDetail},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">#{deleteFlag},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(imgShow)">#{imgShow},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentShow)">#{contentShow},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(belongContentType)">#{belongContentType},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isRelease)">#{isRelease},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">#{creatUser},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">#{creatDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">#{orgId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(viewCount)">#{viewCount},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentSource)">#{contentSource},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentUrl)">#{contentUrl},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileUuid)">#{fileUuid},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(imgFileUuid)">#{imgFileUuid},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(summary)">#{summary},</if>
+        </trim>
+    </insert>
+    
+   <!--        查找指定内容分类 -->
+       <select id="getByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.GhContentManage">
+         SELECT
+           a.contentId AS contentId,
+           a.content_title AS contentTitle,
+           a.content_detail AS contentDetail,
+           a.delete_flag AS deleteFlag,
+           a.img_show AS imgShow,
+           a.content_show AS contentShow,
+           a.belong_contentType AS belongContentType,
+           a.is_release AS isRelease,
+           a.creat_user AS creatUser,
+           a.creat_date AS creatDate,
+           a.content_source AS contentSource,
+           a.content_url AS contentUrl,
+           a.fileUuid AS fileUuid,
+           a.summary AS summary,
+           a.imgFileUuid AS imgFileUuid,
+           b.contentType_name AS belongContentTypeName,
+           b.article_type AS articleType
+         FROM
+           tb_content_manage a 
+           LEFT JOIN tb_content_type b ON a.belong_contentType = b.contentTypeId
+        <where>
+         	a.delete_flag = '0'
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentId)">
+               AND a.contentId=#{contentId}
+            </if>
+        </where>
+      </select> 
+      
+<!--       修改内容 -->
+       <update id="updateSelective" parameterType="com.bluebird.module.admin.model.GhContentManage">
+        	 UPDATE tb_content_manage
+         <set>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentId)">
+               contentId=#{contentId},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentTitle)">
+               content_title=#{contentTitle},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentDetail)">
+               content_detail=#{contentDetail},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(imgShow)">
+               img_show=#{imgShow},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentShow)">
+               content_show=#{contentShow},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(belongContentType)">
+               belong_contentType=#{belongContentType},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isRelease)">
+               is_release=#{isRelease},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentUrl)">
+               content_url=#{contentUrl},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(contentSource)">
+               content_source=#{contentSource},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(summary)">
+               summary=#{summary},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileUuid)">
+               fileUuid=#{fileUuid},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(imgFileUuid)">
+               imgFileUuid=#{imgFileUuid},
+            </if>
+         </set>
+               WHERE contentId=#{contentId}
+       </update>
+       
+       
+        <select id="getContentImgFile" parameterType="map" resultType="com.bluebird.module.admin.model.SysFile">
+       SELECT
+           a.contentId AS linkId ,
+           a.content_title AS linkTile,
+           b.file_path AS url
+         FROM
+           tb_content_manage a 
+           LEFT JOIN system_file b ON a.imgFileUuid = b.uuid 
+           LEFT JOIN tb_content_type c ON a.belong_contentType = c.contentTypeId
+           WHERE a.imgFileUuid IS NOT NULL AND a.img_show = '0' and a.delete_flag = '0' and a.is_release = '0' and c.article_type = '1' order by  a.creat_date desc limit 4
+   
+      </select> 
+ 
+</mapper>

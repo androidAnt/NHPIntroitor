@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.TbMailboxServiceImpl">
+      <!-- 查询主席信箱列表 -->  
+     <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.TbMailbox">
+        SELECT
+           a.mailboxId AS mailboxId,
+           a.title AS title,
+           a.content AS content,
+           c.real_name AS creatUser,
+           a.creat_date AS creatDate,
+           a.replier_type AS replierType,
+           a.auditor_type AS auditorType,
+           SUBSTR(a.creat_date,1,10) AS yymmdd,
+           o.org_name AS orgName 
+         FROM
+           tb_mailbox a 
+           left join sys_org o on a.orgId=o.orgId
+           LEFT JOIN sys_user c ON a.creat_user = c.suId
+        <where>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mailboxId)">
+                 a.mailboxId = #{mailboxId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">
+                AND a.title LIKE "%"#{title}"%"
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+                AND a.orgId = #{orgId}
+             </if>
+              <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorType)">
+                AND a.auditor_type = #{auditorType}
+             </if>
+              <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">
+                AND    a.creat_user = #{creatUser}
+          </if>
+              AND a.delete_flag = '0'
+        </where>
+            order by a.creat_date DESC
+      </select>
+      
+     <!-- 主席信箱总数 -->  
+        <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+          SELECT count(mailboxId)
+          FROM tb_mailbox a
+        <where>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mailboxId)">
+                 a.mailboxId = #{mailboxId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">
+                AND a.title LIKE "%"#{title}"%"
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+                AND a.orgId = #{orgId}
+             </if>
+              <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorType)">
+                AND a.auditor_type = #{auditorType}
+             </if>
+              <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">
+                AND    a.creat_user = #{creatUser}
+              </if>
+              AND a.delete_flag = '0'
+        </where>
+       </select>
+       
+       <!--新增主席信箱	 -->
+       <insert id="saveSelective" parameterType="com.bluebird.module.admin.model.TbMailbox">
+        insert into tb_mailbox
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mailboxId)">mailboxId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">title,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(content)">content,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">delete_flag ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">orgId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">creat_user,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">creat_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierUser)">replier_user,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierDate)">replier_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierType)">replier_type,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierContent)">replier_content,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorType)">auditor_type,</if>
+     
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mailboxId)">#{mailboxId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">#{title},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(content)">#{content},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">#{deleteFlag} ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">#{orgId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">#{creatUser},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">#{creatDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierUser)">#{replierUser},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierDate)">#{replierDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierType)">#{replierType},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierContent)">#{replierContent},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorType)">#{auditorType},</if>
+        </trim>
+    </insert>
+    
+     <!--删除-->
+     <update id="delete" parameterType="String">
+         update tb_mailbox
+         <set>
+			delete_flag = '1' 
+		 </set>
+		 <where>
+			mailboxId=#{mailboxId}
+		 </where>
+       </update>
+       
+     <!--查找 -->
+       <select id="getByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.TbMailbox">
+         SELECT
+          a.mailboxId AS mailboxId,
+           a.title AS title,
+           a.content AS content,
+           a.orgId AS orgId,
+           c.real_name AS creatUser,
+           a.creat_date AS creatDate,
+           a.auditor_content AS auditorContent,
+           a.auditor_type AS auditorType,
+           a.auditor_date AS auditorDate,
+           a.auditor_user AS auditorUser,
+           d.real_name AS replierUser,
+           a.replier_date AS replierDate,
+           a.replier_type AS replierType,
+           a.replier_content AS replierContent
+         FROM
+           tb_mailbox a
+           LEFT JOIN sys_user c ON a.creat_user = c.suId
+           LEFT JOIN sys_user d ON a.replier_user = d.suId
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(mailboxId)">
+                a.mailboxId=#{mailboxId}
+            </if>
+                AND a.delete_flag = '0'
+        </where>
+      </select>  
+       
+     <!--修改 -->
+       <update id="updateSelective" parameterType="com.bluebird.module.admin.model.TbMailbox">
+         UPDATE tb_mailbox	
+         <set>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">
+               title=#{title},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(content)">
+               content=#{content},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierUser)">
+               replier_user=#{replierUser},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierDate)">
+               replier_date=#{replierDate},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierType)">
+               replier_type=#{replierType},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(replierContent)">
+               replier_content=#{replierContent},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorUser)">
+               auditor_user=#{auditorUser},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorDate)">
+               auditor_date=#{auditorDate},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorType)">
+               auditor_type=#{auditorType},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(auditorContent)">
+               auditor_content=#{auditorContent},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(publicity)">
+               publicity=#{publicity},
+            </if>
+         </set>
+               WHERE  mailboxId=#{mailboxId}
+       </update>
+       
+       <!-- 统计 -->
+       <select id="statistics" parameterType="map" resultType="com.bluebird.module.admin.model.TbMailbox">
+        SELECT
+           count(*) as count,
+	       IFNULL(sum( CASE WHEN a.auditor_type = '0' THEN 1 ELSE 0 END ),0) as autp0,
+	       IFNULL(sum( CASE WHEN a.auditor_type = '1' THEN 1 ELSE 0 END ),0) as autp1,
+	       IFNULL(sum( CASE WHEN a.auditor_type = '2' THEN 1 ELSE 0 END ),0) as autp2,
+	       IFNULL(sum( CASE WHEN a.replier_type = '1' THEN 1 ELSE 0 END ),0) as retp1
+         FROM
+           tb_mailbox a 
+        <where>
+        a.delete_flag = '0'
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(startTime)">
+                AND  DATE_FORMAT(a.creat_date, '%Y-%m-%d') >= #{startTime}
+          </if>
+          <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(endTime)">
+                AND #{endTime} >= DATE_FORMAT(a.creat_date, '%Y-%m-%d')
+          </if>
+        </where>
+      </select>
+</mapper>

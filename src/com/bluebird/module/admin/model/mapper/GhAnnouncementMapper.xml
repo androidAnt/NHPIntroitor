@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.GhAnnouncementServiceImpl">
+      <!-- 查询通知公告列表 -->  
+     <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.GhAnnouncement">
+        SELECT
+           a.announcementId AS announcementId,
+           a.announcement_title AS announcementTitle,
+           a.summary AS summary,
+            a.is_show_index AS isShowIndex,
+           a.creat_user AS creatUser,
+           a.creat_date as creatDate,
+           SUBSTR(a.creat_date,1,10) as time
+         FROM
+           tb_announcement a 
+        <where>
+        	a.delete_flag = '0'
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(announcementId)">
+                 AND a.announcementId = #{announcementId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(announcementTitle)">
+                AND a.announcement_title LIKE "%"#{announcementTitle}"%"
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isShowIndex)">
+                AND a.is_show_index = #{isShowIndex}
+             </if>
+        </where>
+            order by a.creat_date  DESC
+      </select>
+      
+     <!-- 通知公告总数 -->  
+        <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+          SELECT count(announcementId)
+          FROM  tb_announcement a
+       <where>
+        	delete_flag = '0'
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(announcementId)">
+                 AND announcementId = #{announcementId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(announcementTitle)">
+                AND announcement_title LIKE "%"#{announcementTitle}"%"
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isShowIndex)">
+                AND is_show_index = #{isShowIndex}
+             </if>
+        </where>
+       </select>
+
+		<!-- 删除通知公告 -->
+		<update id="delete" parameterType="String">
+         update tb_announcement
+         <set>
+			delete_flag = '1' 
+		 </set>
+		 <where>
+			announcementId=#{announcementId}
+		 </where>
+       </update>
+       
+       <!-- 新增通知公告 -->
+       <insert id="saveSelective" parameterType="com.bluebird.module.admin.model.GhAnnouncement">
+        insert into tb_announcement
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(announcementId)">announcementId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(announcementTitle)">announcement_title,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(announcementContent)">announcement_content,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isShowIndex)">is_show_index,</if>
+            
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">orgId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">creat_user,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">creat_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">delete_flag,</if>
+        
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(summary)">summary,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(announcementId)">#{announcementId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(announcementTitle)">#{announcementTitle},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(announcementContent)">#{announcementContent},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isShowIndex)">#{isShowIndex},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">#{orgId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">#{creatUser},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">#{creatDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">#{deleteFlag},</if>
+            
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(summary)">#{summary},</if>
+        </trim>
+    </insert>
+    
+    <!-- 查找通知公告 -->
+     <select id="getByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.GhAnnouncement">
+         SELECT
+           a.announcementId AS announcementId,
+           a.announcement_title AS announcementTitle,
+           a.announcement_content AS announcementContent,
+           a.summary AS summary,
+           a.is_show_index AS isShowIndex,
+           a.creat_user AS creatUser,
+           a.creat_date AS creatDate, 
+           SUBSTR(a.creat_date,1,10) as time
+         FROM
+            tb_announcement a 
+        <where>
+         	a.delete_flag = '0'
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(announcementId)">
+               AND a.announcementId=#{announcementId}
+            </if>
+        </where>
+      </select> 
+      
+      <!-- 修改通知公告 -->
+      <update id="updateSelective" parameterType="com.bluebird.module.admin.model.GhAnnouncement">
+        	 UPDATE tb_announcement
+         <set>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(announcementTitle)">
+              announcement_title=#{announcementTitle},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(announcementContent)">
+               announcement_content=#{announcementContent},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isShowIndex)">
+               is_show_index=#{isShowIndex},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(summary)">
+               summary=#{summary},
+            </if>
+         </set>
+               WHERE announcementId=#{announcementId}
+       </update>
+       
+       <select id="getAnnouncementList" parameterType="map" resultType="com.bluebird.module.admin.model.GhAnnouncement">
+        SELECT
+           a.announcementId AS announcementId,
+           a.announcement_title AS announcementTitle
+         FROM
+           tb_announcement a 
+        <where>
+        	a.delete_flag = '0'
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isShowIndex)">
+                AND a.is_show_index = #{isShowIndex}
+             </if>
+        </where>
+            order by a.creat_date  DESC
+      </select>
+
+</mapper>

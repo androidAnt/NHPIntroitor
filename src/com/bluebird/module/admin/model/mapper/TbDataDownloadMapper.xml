@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.TbDataDownloadServiceImpl">
+      <!-- 查询资料下载列表 -->  
+     <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.TbDataDownload">
+        SELECT
+           a.fileId AS fileId,
+           a.file_name AS fileName,
+           a.file_content AS fileContent,
+           a.menuId AS menuId,
+           a.delete_flag AS deleteFlag,
+           a.orgId AS orgId,
+           a.creat_user AS creatUser,
+           a.creat_date AS creatDate,
+           b.menu_Name AS menuName,
+           o.org_name AS orgName
+         FROM
+           tb_file_download a 
+           left join tb_menu b on a.menuId=b.menuId 
+           left join sys_org o on a.orgId=o.orgId
+        <where>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileId)">
+                 a.fileId = #{fileId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileName)">
+                AND a.file_name LIKE "%"#{fileName}"%"
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+                AND a.menuId = #{menuId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+                AND a.orgId = #{orgId}
+             </if>
+              AND a.delete_flag = '0'
+        </where>
+            order by a.creat_date DESC
+      </select>
+      
+     <!-- 资料下载总数 -->  
+        <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+          SELECT count(fileId)
+          FROM tb_file_download a
+        <where>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileId)">
+                 a.fileId = #{fileId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileName)">
+                AND a.file_name LIKE "%"#{fileName}"%"
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+                AND a.menuId = #{menuId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+                AND a.orgId = #{orgId}
+             </if>
+              AND a.delete_flag = '0'
+        </where>
+       </select>
+       
+       <!--新增资料下载 -->
+       <insert id="saveSelective" parameterType="com.bluebird.module.admin.model.TbDataDownload">
+        insert into tb_file_download
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileId)">fileId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileName)">file_name,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileContent)">file_content,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">menuId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">delete_flag ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">orgId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">creat_user,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">creat_date,</if>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileUuid)">fileUuid,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileId)">#{fileId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileName)">#{fileName},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileContent)">#{fileContent},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">#{menuId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">#{deleteFlag} ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">#{orgId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">#{creatUser},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">#{creatDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileUuid)">#{fileUuid},</if>
+        </trim>
+    </insert>
+    
+     <!--删除资料下载 -->
+     <update id="delete" parameterType="String">
+         update tb_file_download
+         <set>
+			delete_flag = '1' 
+		 </set>
+		 <where>
+			fileId=#{fileId}
+		 </where>
+       </update>
+       
+     <!--查找指定资料 -->
+       <select id="getByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.TbDataDownload">
+         SELECT
+          a.fileId AS fileId,
+           a.file_name AS fileName,
+           a.file_content AS fileContent,
+           a.menuId AS menuId,
+           a.delete_flag AS deleteFlag,
+           a.orgId AS orgId,
+           a.creat_user AS creatUser,
+           a.creat_date AS creatDate,
+           a.fileUuid AS fileUuid
+         FROM
+           tb_file_download a
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileId)">
+                a.fileId=#{fileId}
+            </if>
+                AND a.delete_flag = '0'
+        </where>
+      </select>  
+       
+     <!--修改内容分类 -->
+       <update id="updateSelective" parameterType="com.bluebird.module.admin.model.TbDataDownload">
+         UPDATE tb_file_download	
+         <set>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileName)">
+               file_name=#{fileName},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileContent)">
+               file_content=#{fileContent},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(menuId)">
+               menuId=#{menuId},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileUuid)">
+               fileUuid=#{fileUuid},
+            </if>
+         </set>
+               WHERE  fileId=#{fileId}
+       </update>
+</mapper>

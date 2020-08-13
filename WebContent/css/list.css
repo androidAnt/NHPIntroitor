@@ -1,0 +1,575 @@
+.picture-list-content{
+	width: 90%;
+	height: auto;
+	background: white;
+	margin: auto;
+	padding: 40px 40px 40px 40px;
+	overflow: hidden;
+}
+
+.picture-list-content-info{
+	font-size: 14px;
+	overflow: hidden;
+	width: 80%;
+	float: right;
+}
+.picture-list-content-leftdh{
+	width: 18%;
+	background: white;
+	float: left;
+	border: 1px solid #156ea9;
+}
+.picture-list-content-leftdh ul li{
+	line-height: 40px;
+	text-align: center;
+	cursor: pointer;
+	font-size: 14px;
+	border-bottom: 1px dashed #f1f0f0;
+}
+.picture-list-content-leftdh ul li:hover {
+	background: #b9e1fb;
+	color: #156ea9;
+}
+
+.picture-list-content-leftdh ul li:hover a{
+	color: #156ea9;
+}
+
+.picture-list-content-info-title .p1{
+	color: #156ea9;
+	font-weight: 600;
+}
+
+.picture-list-content-info .infoNewsList {
+	overflow: hidden;
+	width: 100%;
+}
+.picture-list-content-info .infoNewsList li {
+	overflow: hidden;
+	padding-top: 10px;
+	height: 110px;
+	margin: 0;
+	border-bottom: 1px solid #ececec;
+}
+
+.picture-list-content-info .infoNewsList li span {
+	display: block;
+}
+
+.picture-list-content-info .infoNewsList li .title {
+	font-weight: 600;
+	font-size: 14px;
+	padding-top: 5px;
+}
+
+.picture-list-content-info .infoNewsList li .time {
+	font-size: 12px;
+	/* line-height: 25px */
+	float: right;
+    line-height: 40px;
+}
+
+.picture-list-content-info .infoNewsList li p {
+	display: block;
+	/* height: 65px; */
+	overflow: hidden;
+	font-size: 12px;
+	line-height: 20px;
+	color: #999;
+	padding-right: 5px;
+	padding-top:5px;
+	 text-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.picture-list-content-info .infoNewsList li .txt {
+	margin-left: 100px;
+	background: #fdfdfd;
+	padding-left: 10px;
+	height: 100px;
+	overflow: hidden;
+	/* padding-top: 5px; */
+}
+
+.picture-list-content-info .infoNewsList li .img {
+	width: 100px;
+	height: 100px;
+	position: absolute;
+	background-size: cover;
+}
+.picture-list-content-info .infoNewsList li a:hover .txt {
+	background: #eee;
+}
+.picture-list-content-info .infoNewsList li a:hover  .title{
+	color: #156ea9;
+}
+.picture-list-content-info .infoNewsList li a:hover  .time{
+	color: #156ea9;
+}
+
+
+/* 文章列表 */
+.picture-list-content{
+	width: 90%;
+	height: auto;
+	background: white;
+	margin: auto;
+	padding: 40px 40px 40px 40px;
+	overflow: hidden;
+}
+
+.article-list-content-info{
+	font-size: 14px;
+	overflow: hidden;
+	width: 80%;
+	float: right;
+}
+
+.article-list-content-info-title .p1{
+	color: #156ea9;
+	font-weight: 600;
+}
+
+.article-list-content-info .infoNewsList {
+	overflow: hidden;
+	width: 100%;
+}
+.article-list-content-info .infoNewsList li {
+	overflow: hidden;
+	padding-top: 10px;
+	height: 100px;
+	margin: 0;
+	border-bottom: 1px solid #ececec;
+}
+
+.article-list-content-info .infoNewsList li span {
+	display: block;
+}
+
+.article-list-content-info .infoNewsList li .title {
+	font-weight: 600;
+	font-size: 14px
+}
+
+.article-list-content-info .infoNewsList li .time {
+	font-size: 12px;
+	float: right;
+    line-height: 40px;
+}
+
+.article-list-content-info .infoNewsList li p {
+	display: block;
+	font-size: 12px;
+	line-height: 20px;
+	color: #999;
+	padding-right: 5px;
+	-webkit-line-clamp:2;
+	word-break:break-all;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+	overflow: hidden;
+}
+
+.article-list-content-info .infoNewsList li .txt {
+	background: #fdfdfd;
+	padding-left: 10px;
+	height: 100px;
+	overflow: hidden;
+	padding-top: 5px;
+}
+
+.article-list-content-info .infoNewsList li .img {
+	width: 120px;
+	height: 120px;
+	position: absolute;
+	background-size: cover;
+}
+.article-list-content-info .infoNewsList li a:hover .txt {
+	background: #eee;
+}
+.article-list-content-info .infoNewsList li a:hover  .title{
+	color: #156ea9;
+}
+.article-list-content-info .infoNewsList li a:hover  .time{
+	color: #156ea9;
+}
+.message-btn{
+	padding-left: 5px;
+	padding-right: 5px;
+	background: #156ea9;
+	border-radius: 3px;
+	float: right;
+}
+.message-btn a{
+	color: white;
+}
+
+/* 文章详情 */
+.article-info-content p{
+	line-height: 25px;
+}
+.article-info-content .title{
+	text-align: center;
+	font-size: 14px;
+    font-weight: 600;
+}
+.article-info-content .time{
+	text-align: center;
+	font-size: 12px;
+    color: #888;
+}
+.article-info-content .content{
+	width: 100%;
+	color: #525151;
+}
+.article-info-img .picBox ul li{
+	text-align: center;
+}
+
+/* 图片轮播 */
+.article-info-pic {
+	width: 680px;
+	height: 400px;
+	position: relative;
+	margin: 0 auto;
+	padding: 20px 0px 20px 0px;
+}
+
+.article-info-pic .btn {
+	position: absolute;
+	width: 15px;
+	height: 70px;
+	top: 356px;
+	cursor: pointer;
+	z-index: 99;
+	font-size: 50px;
+	font-weight: bold;
+}
+
+.article-info-pic .prev {
+	left: 0;
+	background: url(../img/prevBtn.png) no-repeat;
+}
+
+.article-info-pic #prevTop,.article-info-pic #nextTop {
+	top: 213px;
+	width: 46px;
+	height: 48px;
+}
+
+.article-info-pic #prevTop {
+	background: url(../img/prevBtnTop.png) 0 0 no-repeat;
+}
+
+.article-info-pic #nextTop {
+	background: url(../img/nextBtnTop.png) 0 0 no-repeat;
+}
+
+.article-info-pic .next {
+	right: 0;
+	background: url(../img/nextBtn.png) no-repeat;
+}
+
+.article-info-pic li {
+	float: left;
+}
+
+.article-info-pic .cf li {
+	position: relative;
+	color: #fff;
+}
+
+.article-info-pic .cf a {
+	display: block;
+	width: 680px;
+	height: 330px;
+	position: absolute;
+	color: #fff;
+}
+
+.article-info-pic .cf li span {
+	display: block;
+	width: 640px;
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	padding: 10px 20px;
+	line-height: 22px;
+	text-align: left;
+	background: rgba(0,0,0,0.6);
+	filter: progid:DXImageTransform.Microsoft.gradient( GradientType = 0,startColorstr = "#60000000",endColorstr = "#60000000") 6
+}
+
+.article-info-pic .picBox {
+	height: 330px;
+	position: relative;
+	overflow: hidden;
+}
+
+.article-info-pic .picBox ul {
+	height: 330px;
+	position: absolute;
+}
+
+.article-info-pic .picBox li {
+	width: 680px;
+	height: 330px;
+}
+
+.article-info-pic .listBox {
+	width: 642px;
+	height: 100px;
+	margin: 0 auto;
+	position: relative;
+	padding: 6px 0 10px;
+	overflow: hidden;
+}
+
+.article-info-pic .listBox ul {
+	height: 100px;
+	position: absolute;
+}
+
+.article-info-pic .listBox li {
+	width: 129px;
+	height: 70px;
+	cursor: pointer;
+	position: relative;
+}
+
+.article-info-pic .listBox li i {
+	display: none;
+}
+
+.article-info-pic .listBox li a {
+	display: block;
+	width: 124px;
+	height: 70px;
+}
+
+.article-info-pic .listBox li img {
+	width: 124px;
+	height: 70px;
+}
+
+.article-info-pic .listBox .on img {
+	width: 118px;
+	height: 64px;
+	border: 3px solid #AEAEAE;
+}
+
+.article-info-pic .listBox .on i {
+	display: block;
+}
+
+/* 主席信箱列表 */
+
+
+.article-list-content-info .mailBoxList {
+	overflow: hidden;
+	width: 100%;
+}
+.article-list-content-info .mailBoxList li {
+	overflow: hidden;
+	padding-top: 10px;
+	margin: 0;
+	border-bottom: 1px solid #ececec;
+}
+
+.article-list-content-info .mailBoxList li span {
+	display: block;
+}
+
+.article-list-content-info .mailBoxList li .title {
+	font-weight: 500;
+	font-size: 14px;
+	width: 80%;
+    display: inline-block;
+	white-space: nowrap; 
+	overflow: hidden;
+	text-overflow:ellipsis;
+}
+
+.article-list-content-info .mailBoxList li .time {
+	font-size: 12px;
+	float: right;
+    /* line-height: 40px; */
+}
+
+.article-list-content-info .mailBoxList li p {
+	display: block;
+	font-size: 12px;
+	line-height: 20px;
+	color: #999;
+	padding-right: 5px;
+	-webkit-line-clamp:2;
+	word-break:break-all;
+    text-overflow:ellipsis;
+    display:-webkit-box;
+    -webkit-box-orient:vertical;
+	overflow: hidden;
+}
+
+.article-list-content-info .mailBoxList li .txt {
+	background: #fdfdfd;
+	padding-left: 10px;
+	/* height: 100px; */
+	overflow: hidden;
+	padding-top: 5px;
+}
+
+.article-list-content-info .mailBoxList li .img {
+	width: 120px;
+	height: 120px;
+	position: absolute;
+	background-size: cover;
+}
+.article-list-content-info .mailBoxList li a:hover .txt {
+	background: #eee;
+}
+.article-list-content-info .mailBoxList li a:hover  .title{
+	color: #156ea9;
+}
+.article-list-content-info .mailBoxList li a:hover  .time{
+	color: #156ea9;
+}
+
+
+
+
+/* 主席信箱详情 */
+.mailbox-content{
+	width: 80%;
+	background: white;
+	margin: auto;
+    font-size: 14px;
+}
+.mailbox-img{
+	width: 100%;
+	padding: 30px 0px 20px 40px;
+}
+
+.mailbox-content hr{
+	border: none;
+    background-color: #dcd9d9;
+    height: 1px;
+}
+
+.clears{ clear:both;}
+/*messages*/
+.messages {
+	padding: 30px 0;
+}
+.editPassword{
+	padding: 30px 0;
+	margin: auto;
+	width: 500px;
+}
+.messages input,.messages select,.messages textarea {
+	margin: 0;
+	padding: 0;
+	background: none;
+	border: 0;
+	font-family: "Microsoft Yahei";
+}
+
+.messlist {
+	height: 30px;
+	margin-bottom: 10px;
+}
+
+.messlist label {
+	float: left;
+	width: 100px;
+	height: 30px;
+	font-size: 14px;
+	line-height: 30px;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.messlist .inputText {
+	float: left;
+	width: 350px;
+	height: 28px;
+	padding-left: 5px;
+	border: #ccc 1px solid;
+}
+
+.messlist .inputTextZt{
+	width: 817px;
+	float: left;
+	height: 28px;
+	padding-left: 5px;
+	border: #ccc 1px solid;
+}
+.messlist .inputTextArea{
+	margin-bottom: 10px;
+}
+.messlist textarea {
+	float: left;
+	width: 817px;
+	height: 110px;
+	padding: 5px;
+	border: #ccc 1px solid;
+}
+
+.messlist .inputText300 {
+	float: left;
+	width: 300px;
+	height: 28px;
+	padding-left: 5px;
+	border: #ccc 1px solid;
+}
+.messlist .select-class{
+	float: left;
+	width: 307px;
+	height: 28px;
+	padding-left: 5px;
+	border: #ccc 1px solid;
+}
+.inputTextzw{
+	width: 717px;
+	float: left;
+	height: 28px;
+	padding-left: 5px;
+	border: #ccc 1px solid;
+}
+.inputText280{
+	width: 280px;
+	float: left;
+	height: 28px;
+	padding-left: 5px;
+	border: #ccc 1px solid;
+}
+.messsub {
+	padding: 10px 0 0 110px;
+}
+
+.messsub input {
+	width: 100px;
+	height: 35px;
+	background: #ddd;
+	font-size: 14px;
+	font-weight: bold;
+	cursor: pointer;
+	margin-right: 5px
+}
+
+.messsub input:hover {
+	background: #f60;
+	color: #fff;
+}
+
+.article-list-content-info hr{
+	border: none;
+    background-color: #dcd9d9;
+    height: 1px;
+	margin: 10px;
+}

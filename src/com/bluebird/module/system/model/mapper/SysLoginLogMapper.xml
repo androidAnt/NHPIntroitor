@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 系统登录日志相关mapper SQL -->
+<mapper namespace="com.bluebird.module.system.service.impl.SysLoginLogServiceImpl">
+    <!-- 保存登录日志 -->
+    <insert id="save" parameterType="com.bluebird.module.system.model.SysLoginLog">
+        <![CDATA[
+            INSERT INTO sys_login_log (logId,login_name,suId,content,success,ip,login_date)
+     		VALUES (#{logId},#{loginName},#{suId},#{content},#{success},#{ip},#{loginDate})
+        ]]>
+    </insert>
+    <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.system.model.SysLoginLog">
+        SELECT a.logId,a.login_name AS loginName,content,success,ip,login_date AS loginDate,b.real_name AS realName
+        FROM sys_login_log a
+        LEFT JOIN sys_user b ON b.suId=a.suId
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(success)">
+                AND a.success=success
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgIds)">
+                AND b.orgId ${orgIds}
+            </if>
+              <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(roleId)">
+                AND b.roleId=#{roleId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(searchName)">
+                AND (a.login_name LIKE "%"#{searchName}"%"  or b.real_name LIKE "%"#{searchName}"%" )
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(loginName)">
+                AND a.login_name LIKE "%"#{loginName}"%"
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(realName)">
+                AND b.real_name LIKE "%"#{realName}"%"
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(startDate)">
+                AND login_date BETWEEN #{startDate} AND #{endDate}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(type)">
+                AND a.content LIKE "%"#{type}"%"
+            </if>
+        </where>
+        ORDER BY ${sort}
+    </select>
+    <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+        SELECT count(a.logId)
+        FROM sys_login_log a
+        LEFT JOIN sys_user b ON b.suId=a.suId
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(success)">
+                AND a.success=success
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgIds)">
+                AND b.orgId ${orgIds}
+            </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(roleId)">
+                AND b.roleId=#{roleId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(searchName)">
+                AND (a.login_name LIKE "%"#{searchName}"%"  or b.real_name LIKE "%"#{searchName}"%" )
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(loginName)">
+                AND a.login_name LIKE "%"#{loginName}"%"
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(realName)">
+                AND b.real_name LIKE "%"#{realName}"%"
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(startDate)">
+                AND login_date BETWEEN #{startDate} AND #{endDate}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(type)">
+                AND a.content LIKE "%"#{type}"%"
+            </if>
+        </where>
+    </select>
+</mapper>

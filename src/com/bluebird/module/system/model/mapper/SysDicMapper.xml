@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 系统数据字典相关mapper SQL -->
+<mapper namespace="com.bluebird.module.system.service.impl.SysDicServiceImpl">
+    <resultMap id="BaseResultMap" type="com.bluebird.module.system.model.SysDic">
+        <id column="dicId" property="dicId" jdbcType="VARCHAR"/>
+        <result column="dic_code" property="dicCode" jdbcType="VARCHAR"/>
+        <result column="level" property="level" jdbcType="INTEGER"/>
+        <result column="dic_type" property="dicType" jdbcType="VARCHAR"/>
+        <result column="dicTypeName" property="dicTypeName" jdbcType="VARCHAR"/>
+        <result column="dic_name" property="dicName" jdbcType="VARCHAR"/>
+        <result column="dic_value" property="dicValue" jdbcType="VARCHAR"/>
+        <result column="state" property="state" jdbcType="INTEGER"/>
+        <result column="create_date" property="createDate"/>
+        <result column="remark" property="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!-- 添加数据字典 -->
+    <insert id="save" parameterType="com.bluebird.module.system.model.SysDic">
+        insert into sys_dic
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicId)">dicId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(level)">level,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicCode)">dic_code,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicType)">dic_type,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicName)">dic_name,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicValue)">dic_value,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">state,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotNull(createDate)">create_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotNull(remark)">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicId)">#{dicId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicCode)">#{dicCode},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(level)">#{level},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicType)">#{dicType},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicName)">#{dicName},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicValue)">#{dicValue},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">#{state},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotNull(createDate)">#{createDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotNull(remark)">#{remark},</if>
+        </trim>
+    </insert>
+    <select id="getListByCondition" parameterType="map" resultMap="BaseResultMap">
+        SELECT a.*,b.dic_name AS dicTypeName
+        FROM sys_dic a
+        LEFT JOIN sys_dic b on a.dic_type=b.dicId
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicType)">
+                AND a.dic_type=#{dicType}
+            </if>
+            <if test="null==dicType">
+                AND a.dic_type!='0'
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+                AND a.state=#{state}
+            </if>
+        </where>
+        ORDER BY ${sort}
+    </select>
+    <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(dicId) FROM sys_dic
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicType)">
+                AND dic_type=#{dicType}
+            </if>
+            <if test="null==dicType">
+                AND dic_type!='0'
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+                AND state=#{state}
+            </if>
+        </where>
+    </select>
+    <!-- 获取字典集合 -->
+    <select id="getDicList" parameterType="string" resultMap="BaseResultMap">
+        SELECT * FROM sys_dic WHERE dic_type=#{dicType}
+    </select>
+    <!-- 根据条件判断是否存在数据 -->
+    <select id="hasDic" parameterType="com.bluebird.module.system.model.SysDic" resultMap="BaseResultMap">
+        SELECT * FROM sys_dic
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicId)">
+                AND dicId!=#{dicId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicCode)">
+                AND (dic_code=#{dicCode} OR dic_name=#{dicName})
+            </if>
+            AND dic_type=#{dicType}
+        </where>
+    </select>
+    <!-- 获取用于缓存的字典类型 -->
+    <select id="getDicTypeList" parameterType="string" resultType="com.bluebird.module.system.vo.DicTypeVo">
+        SELECT dicId,dic_code AS dicCode,dic_name AS dicName FROM sys_dic WHERE dic_type=#{dicType} AND state=1
+    </select>
+    <!-- 获取用于缓存的字典 -->
+    <select id="getDicList2Cache"  parameterType="string" resultType="com.bluebird.module.system.vo.DicVo">
+        SELECT a.dicId,a.dic_code AS dicCode,a.dic_type AS dicType,a.dic_name AS dicName,a.dic_value AS dicValue,b.dic_code AS typeCode
+        FROM sys_dic a
+        LEFT JOIN sys_dic b ON b.dic_type=0 AND a.dic_type=b.dicId
+        WHERE a.state=1 AND a.dic_type!=#{dicType}
+        ORDER BY a.dic_type
+    </select>
+    <update id="update" parameterType="com.bluebird.module.system.model.SysDic">
+        UPDATE sys_dic
+        <set>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicCode)">dic_code=#{dicCode},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(level)">level=#{level},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicType)">dic_type=#{dicType},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicName)">dic_name=#{dicName},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(dicValue)">dic_value=#{dicValue},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">state=#{state},</if>
+            <if test="null!=remark">remark=#{remark}</if>
+        </set>
+        WHERE dicId=#{dicId}
+    </update>
+    <delete id="delete" parameterType="string">
+        DELETE FROM sys_dic WHERE dicId=#{dicId}
+    </delete>
+      <!-- 根据disCode查询 -->
+    <select id="getSysDic" parameterType="map" resultType="com.bluebird.module.system.model.SysDic">
+		       SELECT
+			   a.dicId,
+			   a.level,
+			   a.dic_code as dicCode,
+			   a.dic_type as dicType,
+			   a.dic_name as dicName,
+			   a.dic_value as dicValue
+		      FROM
+			  sys_dic a
+		       where
+               a.dic_code =#{dicCode}
+              AND state = 1
+    </select>
+    
+       <select id="getSysDicByCode" parameterType="map" resultType="com.bluebird.module.system.model.SysDic">
+		       SELECT
+			   a.dicId,
+			   a.level,
+			   a.dic_code as dicCode,
+			   a.dic_type as dicType,
+			   a.dic_name as dicName,
+			   a.dic_value as dicValue
+		      FROM
+			  sys_dic a
+		       where
+               a.dic_code =#{dicCode} and a.dic_type = (SELECT  dicId FROM sys_dic WHERE dic_code = #{pCode})
+              AND state = 1
+    </select>
+    
+    <!-- 查询所有 -->
+        <select id="getSysDicList" parameterType="map" resultType="com.bluebird.module.system.model.SysDic">
+		       SELECT
+			   a.dicId,
+			   a.level,
+			   a.dic_code as dicCode,
+			   a.dic_type as dicType,
+			   a.dic_name as dicName,
+			   a.dic_value as dicValue
+		      FROM
+			  sys_dic a
+    </select>
+    <!-- 根据disName查询 -->
+        <select id="getSysDicValue" parameterType="map" resultType="com.bluebird.module.system.model.SysDic">
+		       SELECT
+			   a.dicId,
+			   a.level,
+			   a.dic_code as dicCode,
+			   a.dic_type as dicType,
+			   a.dic_name as dicName,
+			   a.dic_value as dicValue
+		      FROM
+			  sys_dic a
+		       where
+               a.dic_name =#{dicName}
+              AND state = 1
+    </select>
+</mapper>

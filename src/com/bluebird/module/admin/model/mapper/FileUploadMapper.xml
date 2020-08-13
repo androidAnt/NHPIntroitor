@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.FileUploadServiceImpl">
+<!--        新增内容 -->
+        <insert id="saveSelective" parameterType="com.bluebird.module.admin.model.SysFile">
+        insert into system_file
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileId)">fileId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileName)">fileName,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(name)">fileRealName,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(uuid)">uuid,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileType)">file_type ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">delete_flag,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileSize)">file_size,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(url)">file_path,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">creat_user,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">creat_date,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileSource)">file_source,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileId)">#{fileId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileName)">#{fileName},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(name)">#{name},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(uuid)">#{uuid},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileType)">#{fileType},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(deleteFlag)">#{deleteFlag},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileSize)">#{fileSize},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(url)">#{url},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatUser)">#{creatUser},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">#{creatDate},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileSource)">#{fileSource},</if>
+        </trim>
+    </insert>
+    
+     <update id="updateBatech" parameterType="java.util.List">
+        <if test="list!=null">
+            <foreach collection="list" item="file" index= "index" open="" close="" separator =";">
+                update system_file
+                <set>
+                <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(uuid)">
+              	 	uuid=#{file.uuid},
+            	</if>
+            	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileSource)">
+              	 	file_source=#{file.fileSource},
+            	</if>
+            	</set>
+            	 <where>
+                    fileId=#{file.fileId}
+                </where>
+            </foreach>
+        </if>
+    </update>
+    
+     <update id="updateSelective" parameterType="com.bluebird.module.admin.model.SysFile">
+         UPDATE system_file
+            	<set>
+	                <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(uuid)">
+	              	 	uuid=#{uuid},
+	            	</if>
+	            	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileSource)">
+	              	 	file_source=#{fileSource},
+	            	</if>
+         		</set>
+         	WHERE  fileId=#{fileId}
+       </update>
+       
+       <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.SysFile">
+        SELECT
+           a.fileId AS fileId,
+           a.fileRealName AS name,
+           a.file_size AS fileSize,
+           a.file_path AS url
+         FROM
+            system_file a
+        <where>
+        	a.delete_flag = '0'
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileId)">
+                 and a.fileId = #{fileId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(uuid)">
+               	 and a.uuid = #{uuid}
+             </if>
+        </where>
+            order by a.creat_date ASC
+      </select>
+      
+     <!-- 内容分类总数 -->  
+        <select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+          SELECT count(fileId)
+          FROM t system_file 
+        <where>
+        	delete_flag = '0'
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileId)">
+                 and fileId = #{fileId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(uuid)">
+               	 and uuid = #{uuid}
+             </if>
+        </where>
+       </select>
+       
+       <select id="getByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.SysFile">
+         SELECT
+           a.fileId AS fileId,
+           a.fileName AS fileName,
+           a.fileRealName AS name,
+           a.file_path AS url
+         FROM
+           system_file  a
+        <where>
+        	 a.delete_flag = '0'
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(fileId)">
+               AND a.fileId=#{fileId}
+            </if>
+        </where>
+      </select>  
+      
+	<!--删除附件 -->
+	<delete id="delete" parameterType="string">
+        DELETE FROM system_file WHERE fileId=#{fileId}
+    </delete>
+    
+    <delete id="deleteFileByUuid" parameterType="string">
+        DELETE FROM system_file WHERE uuid=#{uuid}
+    </delete>
+    
+</mapper>

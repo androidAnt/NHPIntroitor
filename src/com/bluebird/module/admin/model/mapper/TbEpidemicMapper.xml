@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.TbEpidemicServiceImpl">
+     <!--新增疫情疫情今日上报	 -->
+       <insert id="saveSelective" parameterType="com.bluebird.module.admin.model.TbEpidemic">
+        insert into tb_epidemic
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(epidemicId)">epidemicId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(currPosition)">curr_position,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isTo)">is_to,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isContact)">is_contact ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isDiagnosis)">is_diagnosis,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(currTemperature)">curr_temperature,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(currStatus)">curr_status,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isIsolation)">is_isolation,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isolation)">isolation,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(otherSituations)">other_situations,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(userId)">userId,</if>
+     		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">creat_date,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(epidemicId)">#{epidemicId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(currPosition)">#{currPosition},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isTo)">#{isTo},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isContact)">#{isContact} ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isDiagnosis)">#{isDiagnosis},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(currTemperature)">#{currTemperature},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(currStatus)">#{currStatus},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isIsolation)">#{isIsolation},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(isolation)">#{isolation},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(otherSituations)">#{otherSituations},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(userId)">#{userId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(creatDate)">#{creatDate},</if>
+        </trim>
+    </insert>
+    
+    	<select id="queryReportCurrByUser" parameterType="map" resultType="com.bluebird.module.admin.model.TbEpidemic">
+	      SELECT epidemicId FROM tb_epidemic
+		  WHERE userId = #{userId} AND LEFT(creat_date, 10)=#{creatDate}
+      </select>
+    
+</mapper>

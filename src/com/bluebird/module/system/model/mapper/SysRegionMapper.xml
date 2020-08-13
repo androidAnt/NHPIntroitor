@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 系统区域管理相关mapper SQL -->
+<mapper namespace="com.bluebird.module.system.service.impl.SysRegionServiceImpl">
+    <!-- 获取用于缓存的区域 -->
+    <select id="getCacheList" resultType="com.bluebird.module.system.vo.RegionVo">
+		SELECT srId,code,name,pId,type,lng,lat,level FROM sys_region
+	</select>
+    <insert id="saveSelective" parameterType="com.bluebird.module.system.vo.RegionVo">
+        insert into sys_region
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(srId)">srId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(type)">type,</if>
+            <if test="null!=code">code,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(name)">name,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">pId,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(lng)">lng ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(lat)">lat,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(level)">level,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(sortNO)">sortNO,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(srId)">#{srId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(type)">#{type},</if>
+            <if test="null!=code">#{code},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(name)">#{name},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">#{pId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(lng)">#{lng} ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(lat)">#{lat},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(level)">#{level},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(sortNO)">#{sortNO},</if>
+        </trim>
+    </insert>
+    <update id="updateSelective" parameterType="com.bluebird.module.system.vo.RegionVo">
+        UPDATE sys_region
+        <set>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(type)">type=#{type},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(code)">code=#{code},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(name)">name=#{name},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">pId=#{pId},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(lng)">lng=#{lng} ,</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(lat)">lat=#{lat},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(level)">level=#{level},</if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(sortNO)">sortNO=#{sortNO},</if>
+        </set>
+        WHERE srId=#{srId}
+    </update>
+    <select id="getListByCondition" resultType="com.bluebird.module.system.vo.RegionVo">
+        SELECT a.srId,CONCAT(cname,bname,name) AS name FROM
+        (SELECT a.srId,
+        CASE WHEN c.name is null THEN '' ELSE c.name END AS cname,
+        CASE WHEN b.name is null THEN '' ELSE b.name END AS bname,a.`name` AS name
+        FROM sys_region a
+        LEFT JOIN sys_region b ON a.pId=b.srId
+        LEFT JOIN sys_region c ON b.pId=c.srId
+        ) a
+    </select>
+</mapper>

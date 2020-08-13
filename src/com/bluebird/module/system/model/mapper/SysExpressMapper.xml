@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 系统物流(快递公司)相关mapper SQL -->
+<mapper namespace="com.bluebird.module.system.service.impl.SysExpressServiceImpl">
+    <select id="getListByCondition" resultType="com.bluebird.module.system.model.SysExpress">
+        SELECT *,0 AS useCount,DATE_FORMAT(NOW(),'%Y-%m-%d') AS useDate FROM sys_express
+    </select>
+</mapper>

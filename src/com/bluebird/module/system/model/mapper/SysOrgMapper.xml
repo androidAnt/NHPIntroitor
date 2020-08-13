@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 系统组织机构相关mapper SQL -->
+<mapper namespace="com.bluebird.module.system.service.impl.SysOrgServiceImpl">
+	<!-- 添加组织机构 -->
+	<insert id="saveOrg" parameterType="com.bluebird.module.system.model.SysOrg">
+		insert into sys_org
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+				orgId,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+				pId,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(agent)">
+				agent,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgName)">
+				org_name ,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgCode)">
+				org_code ,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(levels)">
+				levels,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+				state,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createDate)">
+				create_date,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(remark)">
+				remark,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgSort)">
+				org_sort,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+				#{orgId},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+				#{pId},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(agent)">
+				#{agent},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgName)">
+				#{orgName} ,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgCode)">
+				#{orgCode} ,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(levels)">
+				#{levels},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+				#{state},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createDate)">
+				#{createDate},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgSort)">
+				#{orgSort},
+			</if>
+		</trim>
+	</insert>
+
+	<delete id="delOrgByOrgId" parameterType="string">
+		DELETE FROM sys_org WHERE orgId=#{orgId}
+	</delete>
+
+	<!--  修改主机构信息 -->
+	<update id="updateOrg" parameterType="com.bluebird.module.system.model.SysOrg">
+		UPDATE sys_org
+		<set>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+				pId = #{pId},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(agent)">
+				agent = #{agent},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgName)">
+				org_name = #{orgName},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgCode)">
+				org_code = #{orgCode},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(levels)">
+				levels = #{levels},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+				state = #{state},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(createDate)">
+				create_date = #{createDate},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(remark)">
+				remark = #{remark},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgSort)">
+				org_sort = #{orgSort},
+			</if>
+		</set>
+		<where>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+				AND orgId = #{orgId}
+			</if>
+		</where>
+	</update>
+
+	<!-- 根据上级组织机构主键获取子组织机构 -->
+	<select id="getOrgIdList" parameterType="map"  resultType="java.lang.String">
+		SELECT orgId
+		FROM sys_org
+		WHERE pId=#{pId} AND state=1
+	</select>
+
+	<!-- 根据父级主键获取子组织机构集合 -->
+	<select id="getAllChildOrg" parameterType="map" resultType="com.bluebird.module.system.model.SysOrg">
+		SELECT orgId,pId,agent,org_code AS orgCode,org_name AS orgName,levels,state,create_date AS createDate,remark
+		FROM sys_org
+		WHERE pId=#{pId}
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+			AND state=#{state}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgName)">
+			AND org_name LIKE "%"#{orgName}"%"
+		</if>
+	</select>
+	
+	<select id="getZtreeData" parameterType="map" resultType="com.bluebird.module.system.model.SysOrg">
+		SELECT orgId,pId,org_name AS name
+		FROM sys_org
+		WHERE pId=#{pId}
+	</select>
+	
+	<select id="getById" parameterType="map" resultType="com.bluebird.module.system.model.SysOrg">
+		SELECT a.orgId,a.pId,a.org_name AS orgName,a.remark,a.agent,a.levels,a.state,a.create_date as createDate,a.org_code as orgCode,a.org_sort as orgSort,b.org_name as name
+		FROM sys_org a LEFT JOIN sys_org b ON  a.pId = b.orgId
+		WHERE a.orgId=#{orgId}
+	</select>
+
+	<!-- 根据条件获取机构信息-->
+	<select id="getByCondition" parameterType="map" resultType="com.bluebird.module.system.model.SysOrg">
+		SELECT orgId,pId,agent,org_name AS orgName,org_code AS orgCode,levels,state,create_date AS createDate,remark
+		FROM sys_org
+		<where>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+				AND orgId = #{orgId}
+			</if>
+		</where>
+	</select>
+
+	<!-- 判断名字或编码是否存在 -->
+	<select id="hasOrgCodeOrName" parameterType="com.bluebird.module.system.model.SysOrg" resultType="com.bluebird.module.system.model.SysOrg">
+		SELECT orgId,org_name AS orgName,org_code AS orgCode FROM sys_org WHERE (org_name=#{orgName} OR
+		org_code=#{orgCode})
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+			AND orgId!=#{orgId}
+		</if>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+			AND pId=#{pId}
+		</if>
+	</select>
+
+	<!-- 根据条件获取存在的条数（用于判断是否存在）-->
+	<select id="isExist" parameterType="map" resultType="java.lang.Integer">
+		SELECT COUNT(orgId)
+		FROM sys_org
+		<where>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+				AND orgId != #{orgId}
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgName)">
+				AND org_name = #{orgName}
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+				AND pId = #{pId}
+			</if>
+		</where>
+	</select>
+	   <select id="getOrgAndPid" parameterType="com.bluebird.module.system.model.SysOrg" resultType="com.bluebird.module.system.model.SysUser">
+		SELECT a.orgId,a.pId,a.org_name as orgName,b.org_name AS name FROM sys_org a LEFT JOIN sys_org b ON  a.pId = b.orgId
+		<where>
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+				AND a.orgId = #{orgId}
+			</if>
+		</where>
+	</select>
+	     <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.system.model.SysOrg">
+        SELECT
+           a.orgId AS orgId,
+           a.pId AS pId,
+           a.agent AS agent,
+           a.org_name AS orgName,
+           a.org_code AS orgCode,
+           a.levels AS levels,
+           a.create_date AS createDate,
+           a.state AS state,
+           a.org_sort AS orgSort,
+           a.remark AS remark
+         FROM
+           sys_org a
+        <where>
+        	<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgId)">
+                 a.orgId = #{orgId}
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+                AND a.pId = #{pId} 
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgName)">
+                AND a.org_name LIKE "%"#{orgName}"%"
+             </if>
+        </where>
+         UNION
+            SELECT
+           b.orgId AS orgId,
+           b.pId AS pId,
+           b.agent AS agent,
+           b.org_name AS orgName,
+           b.org_code AS orgCode,
+           b.levels AS levels,
+           b.create_date AS createDate,
+           b.state AS state,
+           b.org_sort AS orgSort,
+           b.remark AS remark
+         FROM
+           sys_org b
+            <where>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+                 b.orgId = #{pId} 
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgName)">
+                AND b.org_name LIKE "%"#{orgName}"%"
+             </if>
+             </where>
+            order by 9 asc
+      </select>
+	<select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+          SELECT count(orgId)
+          FROM sys_org 
+        <where>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+                ( pId = #{pId} or ( orgId = #{pId}))
+             </if>
+             <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgName)">
+                AND org_name LIKE "%"#{orgName}"%"
+             </if>
+        </where>
+       </select>
+	
+</mapper>

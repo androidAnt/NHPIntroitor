@@ -1,0 +1,100 @@
+*{margin:0px; padding:0px;}
+html{overflow-y:auto; overflow-x:hidden; font-size: 14px;}
+body{color:#333; background: #fff; font-family:'Microsoft YaHei';}
+textarea,input,code{font-family:'Microsoft YaHei'; outline: none;}
+a{text-decoration:none; color:#333; cursor:pointer; outline: none !important;}
+img{border:none;}
+ul,li{list-style-type:none;}
+.wrap{width:1200px; height: auto; margin:0 auto; clear: both;}
+.wrapOut{width:100%; margin: 0 auto;}
+.clear{clear:both;}
+
+.noMarginL{margin-left: 0 !important;}
+/* head部分 */
+.top{height:36px; background: #ececec;}
+.topMain{line-height: 36px; font-size: 12px;}
+.topMain .pull-left{color: #999;}
+.topMain .pull-left .topLogin{color: #da251d; margin: 0 20px;}
+.topMain .pull-left .topReg{color: #999;}
+.topMain .pull-right a{display: block; float: left; margin-left: 32px;}
+.topRCur{color: #da251d;}
+.topMain .pull-right span{float: left; margin: 0 16px; color: #999;}
+.topMain .pull-right a i{width:14px; height: 14px; float: left; margin:10px 6px 0 0; display: inline-block;}
+.topMain .pull-right a i img{width:100%; height: 100%; float: left;}
+.logoBar{height: 154px; background: #fff;}
+.logoImg{margin: 50px 54px 0 10px;}
+.advWord{margin: 32px 100px 0 0;}
+.topSearch{margin-top: 42px; width:460px;}
+.searchType{width:100%; padding-left: 10px;}
+.searchType a{color: #777; font-size: 14px;}
+.searchType a.on { background: #da251d;color: white;padding: 2px 10px; }
+.searchType span{color: #c1c1c1; margin: 0 8px;}
+.searchBar{float: left; margin:0 0 8px 0}
+.searchBar input{width:370px; height: 36px; background: #fff; border: 2px solid #da251d; padding: 0 10px; float: left; line-height: 32px;}
+.searchBar a{width:82px; height: 36px; background: #da251d; text-align: center; line-height: 36px; display: block; color: #fff; float: right;}
+.historySearch{width:100%; float: left;}
+.historySearch a{color: #b3b3b3; margin-left: 10px;}
+.downLink{margin-top:22px;}
+.downLink p{text-align: center; color: #777; padding-top:5px;}
+/* 菜单部分 */
+.menuOut{background: #da251d; height: 45px;}
+.menu{line-height: 45px; font-size:16px; position: relative;}
+.menu .menuBlock{color: #fff; text-align: center; float: left; display: block; padding: 0 45px;}
+.menu .menuBlock:hover,.curMenu{background:#f6b800 !important;}
+/* 左侧分类菜单  */
+.leftSlide{width:182px; background:#fff; position: absolute; padding-top: 15px; left: 0; top:45px; z-index: 9999;}
+.defaultHide{display: none;}
+.leftSlide .classifyBlock{width:182px; height: 60px; background: #ececec; border-bottom: 1px solid #ddd;}
+.curClassifyMenu{background: #fff !important;}
+.classifyTit{width:182px; height:59px; display: block; float: left; line-height: 59px; font-size: 16px; color: #010101;}
+.classifyTit span{float: left; display: block; margin: 0 8px 0 32px;}
+.classifyCon{position: absolute; left:182px; height:420px; top:15px; border-left: none; background:#fff; width:282px; display: none; padding:5px 15px 15px 15px;}
+.classifyCon a{display: block; width:54px; float: left; margin:15px;}
+.classifyCon a img{width:54px; height: 54px; float: left;}
+.classifyCon a p{text-align: center; width:100%; font-size: 12px; padding-top: 5px;}
+.lastNoBorder{border-bottom: none !important;}
+
+/* foot部分 */
+.foot{background: #ececec; overflow: hidden;}
+.footMenu .footList{float: left; width:15%;}
+.footMenu .footList dt{margin:25px 0 12px 0; font-size: 14px; font-weight: normal;}
+.footMenu .footList dl{margin-bottom:6px; color: #666; font-size: 12px;}
+.copyright{border-top: 3px solid #da251d; float: left; margin-top: 30px; text-align: center; font-size: 12px;background: #ffffff;}
+.bottomMenu{padding: 20px 0 15px 0;}
+.bottomMenu a{color: #666;}
+.bottomMenu span{margin: 0 15px; color: #c1c1c1;}
+.copyright p{color: #b3b3b3;margin-bottom: 20px;}
+
+/*分页样式*/
+.paging {
+	padding: 35px 0 130px;text-align: center; width:100%; float: left;
+}
+.paging .next, .paging .prev {
+	border: 1px solid rgb(215,215,215);background: white;
+}
+.paging a{
+	display: inline-block;height: 34px;line-height: 34px;padding: 0px 12px;color: rgb(89,89,89);
+	border: none;background: #e7e7e7;margin-right: 5px; border: 1px solid #e7e7e7;
+}
+.paging a:hover,.paging a.on{
+	border: 1px solid #da251d;
+	background: #da251d;
+	color: #fff;
+}
+.pagingBtn {
+	width: 66px;height: 34px;text-align: center;line-height: 34px;color: white;font-size: 14px;background: #da251d;display: inline-block;margin: 0 10px;
+}
+.paging input {
+	width: 38px;height: 34px;border: 1px solid #d5d5d5;margin: 0 10px;
+}
+
+/*返回顶部*/
+.goTop {
+	background: url(../images/goTopIcon.png) no-repeat;width: 36px;height: 36px;position: fixed;right: 50px;
+    bottom: 100px;cursor: pointer;
+}
+/*弹框提示*/
+.alertInfo {
+	font-size: 18px;color: white;text-align: center;padding:15px 40px;width: 350px;background:rgba(0,0,0,0.5); border-radius: 5px; position: fixed;bottom:5%;z-index: 999;line-height: 30px;
+	margin-left: 50%;left: -144px;display: none;
+}

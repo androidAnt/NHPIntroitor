@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 系统资源相关mapper SQL -->
+<mapper namespace="com.bluebird.module.system.service.impl.SysResourceServiceImpl">
+    <!-- 根据角色主键获取权限编码集和 -->
+    <select id="getRolePmssByRoleId" parameterType="map" resultType="java.lang.String">
+		SELECT a.res_code AS resCode
+		FROM sys_resource a,sys_role_resource b
+		WHERE b.roleId=#{roleId} AND a.resId=b.resId and a.state='1'
+	</select>
+
+    <!-- 根据角色主键获取拥有模块集和 -->
+    <select id="getRoleModules" parameterType="map" resultType="com.bluebird.module.system.vo.ModuleVo">
+		SELECT a.resId,a.icon,a.res_code AS resCode,a.res_name AS resName
+		FROM sys_resource a,sys_role_resource b
+		WHERE b.roleId=#{roleId} AND a.resId=b.resId AND a.type=0 AND  a.module_type=#{moduleType} AND  a.state=1
+		ORDER BY  a.sort_order
+	</select>
+
+	<!-- 根据上级ID获取下级几点集合 -->
+	<select id="getMenu" parameterType="map" resultType="com.bluebird.module.system.vo.MenuVo">
+		SELECT a.resId AS menuId,a.icon,a.res_name AS menuName,a.content,a.type
+		FROM sys_resource a,sys_role_resource b
+		WHERE a.pId=#{pId} AND b.roleId=#{roleId} AND a.resId=b.resId AND  a.state=1
+		ORDER BY a.sort_order
+	</select>
+
+	<!-- 根据上级ID获取子资源 -->
+	<select id="getResByPId"  parameterType="string"  resultType="com.bluebird.module.system.model.SysResource">
+		SELECT resId,pId,type,res_code AS resCode,res_name AS resName,icon,sort_order AS sortOrder,content,state,remark,create_date AS createDate,module_type AS moduleType
+		FROM sys_resource
+		WHERE pId=#{pId} ORDER BY sort_order ASC
+	</select>
+
+	<!-- 判断资源名称或者编码有没有重复 -->
+	<select id="hasNameOrCode" parameterType="com.bluebird.module.system.model.SysResource" resultType="com.bluebird.module.system.model.SysResource">
+		SELECT resId,res_name AS resName,res_code AS resCode FROM sys_resource WHERE ((res_name=#{resName} AND pId=#{pId}) OR res_code=#{resCode})
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(resId)">
+			AND resId!=#{resId}
+		</if>
+	</select>
+
+	<!-- 判断是否存在子节点 -->
+	<select id="isExist" parameterType="map" resultType="java.lang.Integer">
+		SELECT COUNT(resId) FROM sys_resource
+		<where>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+				AND pId=#{pId}
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(resId)">
+				AND resId=#{resId}
+			</if>
+		</where>
+	</select>
+
+	<!-- 删除前判断是否已被赋予角色 -->
+	<select id="hasResRole" parameterType="map" resultType="java.lang.Integer">
+		SELECT COUNT(resId) FROM sys_role_resource WHERE resId=#{resId}
+	</select>
+
+	<!-- 添加资源 -->
+	<insert id="saveRes" parameterType="com.bluebird.module.system.model.SysResource">
+		<![CDATA[
+            INSERT INTO sys_resource
+            (resId,pId,type,res_code,res_name,icon,sort_order,content,state,create_date,remark,module_type)
+     		VALUES
+     		(#{resId},#{pId},#{type},#{resCode},#{resName},#{icon},#{sortOrder},#{content},#{state},#{createDate},#{remark},#{moduleType})
+        ]]>
+	</insert>
+
+	<!-- 根据主键删除资源-->
+	<delete id="delResByResId" parameterType="string">
+		DELETE FROM sys_resource WHERE resId=#{resId}
+	</delete>
+
+	<!-- 修改资源 -->
+	<update id="updateRes" parameterType="com.bluebird.module.system.model.SysResource">
+		UPDATE sys_resource
+		<set>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(resCode)">
+				res_code = #{resCode},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(moduleType)">
+				module_type = #{moduleType},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(resName)">
+				res_name = #{resName},
+			</if>
+			<if test="icon!=null">
+				icon = #{icon},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(sortOrder)">
+				sort_order = #{sortOrder},
+			</if>
+			<if test="content!=null">
+				content = #{content},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+				state = #{state},
+			</if>
+			<if test="remark!=null">
+				remark = #{remark}
+			</if>
+		</set>
+		WHERE  resId=#{resId}
+	</update>
+
+	<!-- 获取所有可用的资源并关联角色资源表(用于角色授权) -->
+	<select id="getAdminRes" parameterType="string" resultType="com.bluebird.module.system.vo.ZTreeVo">
+		SELECT a.resId AS id,a.pId,a.res_name AS name,CASE WHEN b.resId  is null THEN 0 ELSE 1 END as checked
+		FROM sys_resource a
+		LEFT JOIN (SELECT resId FROM sys_role_resource WHERE roleId=#{roleId}) b ON  b.resId=a.resId
+		WHERE a.state=1 ORDER BY sort_order ASC
+	</select>
+	<!-- 获取所有可用的资源并关联角色资源表(用于角色授权) -->
+	<select id="getAllRes" parameterType="map" resultType="com.bluebird.module.system.vo.ZTreeVo">
+		SELECT a.*,CASE WHEN b.resId  is null THEN false ELSE true END as checked
+		FROM (
+		SELECT a.resId AS id,a.pId,a.res_name AS name
+		FROM sys_resource a,sys_role_resource b
+		WHERE b.roleId=#{myRoleId}
+		AND a.resId=b.resId GROUP BY a.resId,a.pId,a.res_name ORDER BY sort_order ASC ) a
+		LEFT JOIN (SELECT resId FROM sys_role_resource WHERE roleId=#{roleId}) b ON a.id=b.resId
+	</select>
+</mapper>

@@ -1,0 +1,1 @@
+var allUrl="http://localhost:8080/hrd";

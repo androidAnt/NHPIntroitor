@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 系统角色相关mapper SQL -->
+<mapper namespace="com.bluebird.module.system.service.impl.SysRoleServiceImpl">
+	<!-- 根据用户主键获取用户拥有的角色信息 -->
+	<select id="getRoleBySuId" parameterType="map"  resultType="com.bluebird.module.system.vo.RoleVo">
+		SELECT a.roleId,a.role_code AS roleCode
+		FROM sys_role a
+		LEFT JOIN sys_user b ON a.roleId=b.roleId
+		WHERE a.state=1 AND b.suId=#{suId}
+	</select>
+
+	<!-- 获取除超级管理员外的角色 -->
+	<select id="getAllRole" parameterType="map" resultType="com.bluebird.module.system.model.SysRole">
+		SELECT a.roleId,a.role_code AS roleCode,a.role_name AS roleName,a.state,
+		a.create_date AS createDate,a.remark,CASE WHEN b.roleId  is null THEN '0' ELSE '1' END as hasPmss
+		FROM sys_role a
+		LEFT JOIN (SELECT distinct roleId FROM sys_role_resource) b ON b.roleId=a.roleId
+		<where>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(SYS_SUPER_ADMINCODE)">
+				AND a.role_code!=#{SYS_SUPER_ADMINCODE} <!-- AND a.create_suId=#{createSuId} or a.roleId=#{roleId} -->
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+				AND a.state=#{state}
+			</if>
+		</where>
+		 order by create_date DESC
+	</select>
+
+	<!-- 名称或者编码是否重复 -->
+	<select id="hasRoleCodeOrName" parameterType="com.bluebird.module.system.model.SysRole" resultType="com.bluebird.module.system.model.SysRole">
+		SELECT roleId,role_name AS roleName,role_code AS roleCode
+		FROM sys_role
+		WHERE (role_name=#{roleName} OR role_code=#{roleCode})
+		<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(roleId)">
+			AND roleId!=#{roleId}
+		</if>
+	</select>
+
+	<!-- 删除角色时判断是否有用户使用 -->
+	<select id="isRoleUse" parameterType="string"  resultType="com.bluebird.module.system.model.SysRole">
+		SELECT roleId FROM sys_user WHERE roleId=#{roleId} LIMIT 0,1
+	</select>
+
+	<!-- 添加角色 -->
+	<insert id="saveRole" parameterType="com.bluebird.module.system.model.SysRole">
+		<![CDATA[
+            INSERT INTO sys_role (roleId,role_code,role_name,state,create_date,remark,create_suId)
+     		VALUES (#{roleId},#{roleCode},#{roleName},#{state},#{createDate},#{remark},#{createSuId})
+        ]]>
+	</insert>
+
+	<!-- 修改角色 -->
+	<update id="updateRole" parameterType="com.bluebird.module.system.model.SysRole">
+		UPDATE sys_role
+		<set>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(roleCode)">
+				role_code = #{roleCode},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(roleName)">
+				role_name = #{roleName},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+				state = #{state},
+			</if>
+			<if test="remark!=null">
+				remark = #{remark}
+			</if>
+		</set>
+		WHERE  roleId=#{roleId}
+	</update>
+
+	<!-- 根据主键删除角色-->
+	<delete id="delRoleByRoleId" parameterType="string">
+		DELETE FROM sys_role WHERE roleId=#{roleId}
+	</delete>
+
+	<!-- 根据角色主键删除角色资源关联表数据-->
+	<delete id="delRoleResByRoleId" parameterType="string">
+		DELETE FROM sys_role_resource WHERE roleId=#{roleId}
+	</delete>
+
+	<!-- 角色授权 -->
+	<insert id="saveRoleRes" parameterType="java.util.List">
+		INSERT INTO sys_role_resource (rsId,roleId,resId) VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(#{item.rsId},#{item.roleId},#{item.resId})
+		</foreach>
+	</insert>
+</mapper>

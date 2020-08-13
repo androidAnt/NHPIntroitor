@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
+       default-autowire="byName" default-lazy-init="false">
+    <description>EhCache配置文件</description>
+    <bean id="ehcacheManager" class="com.bluebird.framework.cache.CacheManagerFactoryBean">
+        <property name="configLocation" value="classpath:conf/ehcache/ehcache.xml"/>
+        <property name="diskStoreLocation" value="${bluebird_jxcl}/WEB-INF/cache"/>
+    </bean>
+    <bean id="ehcacheImpl" class="com.bluebird.framework.cache.EhcacheImpl"></bean>
+    <!-- 数据字典 -->
+    <bean id="dicCache" class="com.bluebird.components.cache.DicCache"/>
+    <!-- 商品类型 -->
+    <bean id="ccCache" class="com.bluebird.components.cache.CommodityClassifyCache"/>
+    <!-- 省市区-->
+    <bean id="regionCache" class="com.bluebird.components.cache.RegionCache"/>
+    <!-- 平台参数-->
+   <!--  <bean id="configCache" class="com.bluebird.components.cache.PlatformConfigCache"/> -->
+    <!-- 数据字典 -->
+    <bean name="cacheFactory" class="com.bluebird.framework.cache.CacheFactory">
+        <property name="items">
+            <list>
+                <ref local="dicCache"/>
+                <ref local="ccCache"/>
+                <ref local="regionCache"/>
+               
+            </list>
+        </property>
+    </bean>
+</beans>

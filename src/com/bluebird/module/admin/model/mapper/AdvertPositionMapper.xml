@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bluebird.module.admin.service.impl.AdvertPositionServiceImpl">
+    <!--  保存广告位置 -->
+    <insert id="saveSelective" parameterType="com.bluebird.module.admin.model.AdvertPosition">
+        insert into advert_position
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                      
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(apId)">
+                apId,
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+                pId,
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">
+                title ,
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(width)">
+                width,
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(height)">
+                height,
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(opUId)">
+                op_uId,
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(opDate)">
+                op_date,
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+                state,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(apId)">
+                #{apId},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+                #{pId},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">
+                #{title},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(width)">
+                #{width},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(height)">
+                #{height},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(opUId)">
+                #{opUId},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(opDate)">
+                #{opDate},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+                #{state},
+            </if>
+        </trim>
+    </insert>
+    <select id="isExist" parameterType="map" resultType="java.lang.Integer">
+        SELECT count(apId) FROM advert_position
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(apId)">
+                AND apId != #{apId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+                AND pId = #{pId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">
+                AND title = #{title}
+            </if>
+        </where>
+    </select>
+    <select id="getByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.AdvertPosition">
+        SELECT a.apId,a.pId,a.title,a.op_uId AS opUId,a.op_date AS opDate,a.state,a.width,a.height,b.title AS pTitle
+        FROM advert_position a
+        LEFT JOIN advert_position b ON a.pId=b.apId
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(apId)">
+                AND a.apId = #{apId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+                AND a.pId = #{pId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">
+                AND a.title = #{title}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+                AND a.state = #{state}
+            </if>
+        </where>
+    </select>
+    <!-- 后台管理员查看广告位置列表 -->
+    <select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.admin.model.AdvertPosition">
+        SELECT a.apId,a.pId,a.title,a.op_uId AS opUId,a.op_date AS opDate,a.state,a.width,a.height,b.title AS pTitle
+        FROM advert_position a
+        LEFT JOIN advert_position b ON a.pId=b.apId
+        <where>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(apId)">
+                AND a.apId=#{apId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+                AND a.pId=#{pId}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">
+                AND a.title LIKE "%"#{title}"%"
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pTitle)">
+                AND b.pTitle LIKE "%"#{pTitle}"%"
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+                AND a.state=#{state}
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(startDate)">
+                AND a.op_date BETWEEN #{startDate} AND #{endDate}
+            </if>
+        </where>
+        <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(sort)">
+            ORDER BY ${sort}
+        </if>
+    </select>
+    <!-- 修改广告位置信息 -->
+    <update id="updateSelective" parameterType="com.bluebird.module.admin.model.AdvertPosition">
+        UPDATE advert_position
+        <set>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(title)">
+                title = #{title},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(pId)">
+                pId = #{pId},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(width)">
+                width = #{width},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(height)">
+                height = #{height},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(opDate)">
+                op_date = #{opDate},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(opUId)">
+                op_uId = #{opUId},
+            </if>
+            <if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(state)">
+                state = #{state},
+            </if>
+        </set>
+        WHERE apId=#{apId}
+    </update>
+    <update id="editState" parameterType="com.bluebird.module.admin.model.AdvertPosition">
+        UPDATE advert_position SET state = #{state},op_date=#{opDate} WHERE apId=#{apId}
+    </update>
+</mapper>

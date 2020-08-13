@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 系统组织机构相关mapper SQL -->
+<mapper namespace="com.bluebird.module.system.service.impl.SysOpLogServiceImpl">
+	<!-- 添加组织机构 -->
+	<insert id="saveSysOpLog" parameterType="com.bluebird.module.system.model.SysOpLog">
+		insert into sys_op_log
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(opId)">
+				opId,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(className)">
+				class_name,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(methodName)">
+				method_name,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(des)">
+				des ,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(success)">
+				success ,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(params)">
+				params,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotNull(exceptionCode)">
+				exception_code,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotNull(exceptionDetail)">
+				exception_detail,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(suId)">
+				suId,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(operateTime)">
+				operate_time,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(opId)">
+				#{opId},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(className)">
+				#{className},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(methodName)">
+				#{methodName},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(des)">
+				#{des} ,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(success)">
+				#{success} ,
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(params)">
+				#{params},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotNull(exceptionCode)">
+				#{exceptionCode},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotNull(exceptionDetail)">
+				#{exceptionDetail},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(suId)">
+				#{suId},
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(operateTime)">
+				#{operateTime},
+			</if>
+		</trim>
+	</insert>
+	<select id="getListByCondition" parameterType="map" resultType="com.bluebird.module.system.model.SysOpLog">
+		SELECT a.opId,a.des,a.success,operate_time AS operateTime,b.real_name AS realName,a.exception_code AS exceptionCode,b.login_name AS loginName
+		FROM sys_op_log a
+		LEFT JOIN sys_user b ON b.suId=a.suId
+		<where>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgIds)">
+				AND b.orgId ${orgIds} AND  b.suId=a.suId
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(searchName)">
+				AND (b.login_name LIKE "%"#{searchName}"%"  or b.real_name LIKE "%"#{searchName}"%" )
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(loginName)">
+				AND b.login_name LIKE "%"#{loginName}"%"
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(realName)">
+				AND b.real_name LIKE "%"#{realName}"%"
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(startDate)">
+				AND a.operate_time BETWEEN #{startDate} AND #{endDate}
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(des)">
+				AND a.des LIKE "%"#{des}"%"
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(success)">
+				AND a.success =#{success}
+			</if>
+		</where>
+		ORDER BY ${sort}
+	</select>
+	<select id="getCountByCondition" parameterType="map" resultType="java.lang.Integer">
+		SELECT count(a.opId)
+		FROM sys_op_log a
+		LEFT JOIN sys_user b ON b.suId=a.suId
+		<where>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(orgIds)">
+				AND b.orgId ${orgIds} AND  b.suId=a.suId
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(searchName)">
+				AND (b.login_name LIKE "%"#{searchName}"%"  or b.real_name LIKE "%"#{searchName}"%" )
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(loginName)">
+				AND b.login_name LIKE "%"#{loginName}"%"
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(realName)">
+				AND b.real_name LIKE "%"#{realName}"%"
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(startDate)">
+				AND a.operate_time BETWEEN #{startDate} AND #{endDate}
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(des)">
+				AND a.des LIKE "%"#{des}"%"
+			</if>
+			<if test="@com.bluebird.framework.dao.dbutil.Ognl@isNotEmpty(success)">
+				AND a.success =#{success}
+			</if>
+		</where>
+	</select>
+	<select id="getById" parameterType="string" resultType="com.bluebird.module.system.model.SysOpLog">
+		SELECT a.opId,a.des,a.success,a.class_name AS className,a.method_name AS methodName,a.params,a.exception_code AS exceptionCode,a.exception_detail AS exceptionDetail,a.operate_time AS operateTime,a.exception_code AS exceptionCode,
+		b.real_name AS realName,
+		b.login_name AS loginName
+		FROM sys_op_log a
+		LEFT JOIN sys_user b ON b.suId=a.suId
+		WHERE a.opId=#{opId}
+	</select>
+</mapper>
